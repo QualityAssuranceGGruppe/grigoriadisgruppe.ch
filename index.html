@@ -9,125 +9,133 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
+:root {
+    --bg: #f5f5f5;
+    --text: #222;
+    --card: rgba(255,255,255,0.7);
+}
+
+body.dark {
+    --bg: #0f1115;
+    --text: #eaeaea;
+    --card: rgba(255,255,255,0.05);
+}
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #f5f5f5, #eaeaea);
-    color: #333;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    background: var(--bg);
+    color: var(--text);
+    transition: 0.3s;
 }
 
 /* HEADER */
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:25px 40px;
 }
 
-/* ICON BUTTONS */
+/* BUTTONS */
 .buttons-container {
-    display: flex;
-    gap: 20px;
+    display:flex;
+    gap:15px;
 }
 
 .icon-button {
-    width: 65px;
-    height: 65px;
-    border-radius: 15px;
-    background: white;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.icon-button img {
-    width: 60%;
+    width:60px;
+    height:60px;
+    border-radius:15px;
+    background:var(--card);
+    backdrop-filter: blur(10px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transition:0.3s;
 }
 
 .icon-button:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    transform:translateY(-5px);
 }
 
-/* TITLE + LINKS */
-.managing-assets {
-    text-align: right;
+.icon-button img {
+    width:60%;
 }
 
-.managing-assets h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 38px;
-    color: #8B6F47;
-    margin-bottom: 25px;
-    letter-spacing: 1px;
+/* DARK MODE TOGGLE */
+.toggle {
+    cursor:pointer;
+    padding:10px 15px;
+    border-radius:10px;
+    background:#8B6F47;
+    color:white;
+    font-size:14px;
 }
 
-/* LINKS */
-.assets-links {
-    list-style: none;
+/* TITLE */
+.title {
+    text-align:center;
+    margin-top:10px;
 }
 
-.assets-links li {
-    margin-bottom: 14px;
+.title h1 {
+    font-family:'Playfair Display', serif;
+    font-size:42px;
+    color:#8B6F47;
 }
 
-.assets-links a {
-    text-decoration: none;
-    color: #555;
-    font-size: 17px;
-    position: relative;
-    transition: all 0.3s ease;
+/* DASHBOARD GRID */
+.dashboard {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+    gap:25px;
+    padding:40px;
 }
 
-/* fancy underline animation */
-.assets-links a::after {
-    content: "";
-    position: absolute;
-    width: 0%;
-    height: 2px;
-    bottom: -4px;
-    left: 0;
-    background: linear-gradient(to right, #8B6F47, #c6a96b);
-    transition: width 0.3s ease;
+/* CARD */
+.card {
+    padding:20px;
+    border-radius:20px;
+    background:var(--card);
+    backdrop-filter: blur(12px);
+    transition:0.3s;
+    cursor:pointer;
 }
 
-.assets-links a:hover {
-    color: #000;
+.card:hover {
+    transform: translateY(-8px);
 }
 
-.assets-links a:hover::after {
-    width: 100%;
+/* STOCK NAME */
+.card h2 {
+    font-size:18px;
+    margin-bottom:10px;
+}
+
+/* IFRAME */
+iframe {
+    width:100%;
+    height:80px;
+    border:none;
 }
 
 /* FOOTER */
 .footer {
-    margin-top: auto;
-    text-align: center;
-    padding: 40px;
+    text-align:center;
+    padding:30px;
 }
 
 .footer img {
-    max-width: 180px;
-    opacity: 0.85;
-    transition: 0.3s;
-}
-
-.footer img:hover {
-    opacity: 1;
-    transform: scale(1.05);
+    max-width:150px;
+    opacity:0.8;
 }
 </style>
-
 </head>
 
 <body>
@@ -140,27 +148,56 @@ body {
         </a>
 
         <a href="https://grigoriadisdionysios.de6.quickconnect.to/#/signin" class="icon-button">
-            <img src="GGdMS.png" alt="GGdMS">
+            <img src="GGdMS.png" alt="System">
         </a>
     </div>
 
-    <div class="managing-assets">
-        <h1>Managing Assets</h1>
+    <div class="toggle" onclick="toggleDark()">Toggle Mode</div>
 
-        <ul class="assets-links">
-            <li><a href="https://www.etoro.com/markets/JPM">JP Morgan Chase & Co</a></li>
-            <li><a href="https://www.etoro.com/markets/RHM.DE">Rheinmetall AG</a></li>
-            <li><a href="https://www.etoro.com/markets/GS">Goldman Sachs Group Inc</a></li>
-            <li><a href="https://www.etoro.com/markets/MSFT">Microsoft</a></li>
-            <li><a href="https://www.etoro.com/de/markets/00857.hk">PetroChina</a></li>
-        </ul>
-    </div>
+</div>
+
+<div class="title">
+    <h1>Managing Assets</h1>
+</div>
+
+<div class="dashboard">
+
+    <a href="https://www.etoro.com/markets/JPM" class="card">
+        <h2>JP Morgan</h2>
+        <iframe src="https://widget.finnhub.io/widgets/stocks/chart?symbol=JPM&theme=light"></iframe>
+    </a>
+
+    <a href="https://www.etoro.com/markets/RHM.DE" class="card">
+        <h2>Rheinmetall</h2>
+        <iframe src="https://widget.finnhub.io/widgets/stocks/chart?symbol=RHM.DE&theme=light"></iframe>
+    </a>
+
+    <a href="https://www.etoro.com/markets/GS" class="card">
+        <h2>Goldman Sachs</h2>
+        <iframe src="https://widget.finnhub.io/widgets/stocks/chart?symbol=GS&theme=light"></iframe>
+    </a>
+
+    <a href="https://www.etoro.com/markets/MSFT" class="card">
+        <h2>Microsoft</h2>
+        <iframe src="https://widget.finnhub.io/widgets/stocks/chart?symbol=MSFT&theme=light"></iframe>
+    </a>
+
+    <a href="https://www.etoro.com/de/markets/00857.hk" class="card">
+        <h2>PetroChina</h2>
+        <iframe src="https://widget.finnhub.io/widgets/stocks/chart?symbol=0857.HK&theme=light"></iframe>
+    </a>
 
 </div>
 
 <div class="footer">
     <img src="NewBulletinLogo.png" alt="Logo">
 </div>
+
+<script>
+function toggleDark() {
+    document.body.classList.toggle("dark");
+}
+</script>
 
 </body>
 </html>
