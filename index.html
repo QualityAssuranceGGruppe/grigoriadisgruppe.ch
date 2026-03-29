@@ -3,28 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>My Website</title>
     <style>
         body { font-family: Arial, sans-serif; }
-        .header { position: absolute; top: 10px; left: 10px; }
-        .header button { margin-right: 10px; }
-        .content { text-align: right; margin-top: 40px; }
-        .footer { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); }
+        .top-buttons { position: absolute; top: 10px; left: 10px; }
+        .top-buttons img { width: 40px; height: 40px; margin-right: 10px; }
+        .heading { text-align: right; color: brown; font-family: Tahoma; }
+        .footer { text-align: center; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <button>Mail</button>
-        <button>GGdMS</button>
+    <div class="top-buttons">
+        <a href="https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1"><img src="Mail.png" alt="Mail" /></a>
+        <a href="https://grigoriadisdionysios.de6.quickconnect.to/#/signin"><img src="GGdMS.png" alt="GGdMS" /></a>
     </div>
-    <div class="content">
+    <div class="heading">
         <h1>Managing Assets</h1>
-        <a href="#">Link 1</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a>
+        <ul>
+            <li><a href="https://www.etoro.com/markets/JP-Morgan-Chase-Co">JP Morgan Chase & Co</a></li>
+            <li><a href="https://www.etoro.com/markets/Rheinmetall-AG">Rheinmetall AG</a></li>
+            <li><a href="https://www.etoro.com/markets/Goldman-Sachs-Group-Inc">Goldman Sachs Group Inc</a></li>
+            <li><a href="https://www.etoro.com/markets/Microsoft">Microsoft</a></li>
+        </ul>
     </div>
     <div class="footer">
-        <img src="NewBulletinLogo.png" alt="New Bulletin Logo">
+        <img src="NewBulletinLogo.png" alt="New Bulletin Logo" />
     </div>
 </body>
 </html>
