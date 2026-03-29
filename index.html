@@ -42,7 +42,6 @@ body {
     padding:25px 40px;
 }
 
-/* BUTTONS */
 .buttons-container {
     display:flex;
     gap:15px;
@@ -68,20 +67,17 @@ body {
     width:60%;
 }
 
-/* DARK MODE TOGGLE */
 .toggle {
     cursor:pointer;
     padding:10px 15px;
     border-radius:10px;
     background:#8B6F47;
     color:white;
-    font-size:14px;
 }
 
 /* TITLE */
 .title {
     text-align:center;
-    margin-top:10px;
 }
 
 .title h1 {
@@ -90,7 +86,7 @@ body {
     color:#8B6F47;
 }
 
-/* DASHBOARD GRID */
+/* DASHBOARD */
 .dashboard {
     display:grid;
     grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
@@ -98,42 +94,81 @@ body {
     padding:40px;
 }
 
-/* CARD */
 .card {
     padding:20px;
     border-radius:20px;
     background:var(--card);
     backdrop-filter: blur(12px);
     transition:0.3s;
-    cursor:pointer;
 }
 
 .card:hover {
     transform: translateY(-8px);
 }
 
-/* STOCK NAME */
-.card h2 {
-    font-size:18px;
-    margin-bottom:10px;
-}
-
-/* IFRAME */
 iframe {
     width:100%;
     height:80px;
     border:none;
 }
 
-/* FOOTER */
+/* LOGO AREA */
 .footer {
-    text-align:center;
-    padding:30px;
+    display:flex;
+    justify-content:center;
+    padding:80px 20px;
 }
 
-.footer img {
-    max-width:150px;
-    opacity:0.8;
+.logo-wrapper {
+    position: relative;
+    perspective: 1000px;
+}
+
+#particles {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+}
+
+.logo-card {
+    position: relative;
+    padding: 30px 50px;
+    border-radius: 25px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(20px);
+    text-align:center;
+}
+
+.logo {
+    width:180px;
+    opacity:0;
+    transform: translateY(20px);
+    animation: fadeIn 1.2s ease forwards;
+}
+
+.logo-text {
+    margin-top:15px;
+    letter-spacing:3px;
+    font-size:14px;
+    color:#8B6F47;
+    opacity:0;
+    animation: fadeIn 1.5s ease forwards;
+}
+
+.ticker {
+    margin-top:10px;
+    font-size:13px;
+    opacity:0;
+    animation: fadeIn 2s ease forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity:1;
+        transform: translateY(0);
+    }
 }
 </style>
 </head>
@@ -141,19 +176,16 @@ iframe {
 <body>
 
 <div class="header">
-
     <div class="buttons-container">
         <a href="https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1" class="icon-button">
-            <img src="Mail.png" alt="Mail">
+            <img src="Mail.png">
         </a>
-
         <a href="https://grigoriadisdionysios.de6.quickconnect.to/#/signin" class="icon-button">
-            <img src="GGdMS.png" alt="System">
+            <img src="GGdMS.png">
         </a>
     </div>
 
     <div class="toggle" onclick="toggleDark()">Toggle Mode</div>
-
 </div>
 
 <div class="title">
@@ -161,42 +193,117 @@ iframe {
 </div>
 
 <div class="dashboard">
-
-    <a href="https://www.etoro.com/markets/JPM" class="card">
-        <h2>JP Morgan</h2>
+    <div class="card"><h3>JP Morgan</h3>
         <iframe src="https://widget.finnhub.io/widgets/stocks/chart?symbol=JPM&theme=light"></iframe>
-    </a>
+    </div>
 
-    <a href="https://www.etoro.com/markets/RHM.DE" class="card">
-        <h2>Rheinmetall</h2>
+    <div class="card"><h3>Rheinmetall</h3>
         <iframe src="https://widget.finnhub.io/widgets/stocks/chart?symbol=RHM.DE&theme=light"></iframe>
-    </a>
+    </div>
 
-    <a href="https://www.etoro.com/markets/GS" class="card">
-        <h2>Goldman Sachs</h2>
+    <div class="card"><h3>Goldman Sachs</h3>
         <iframe src="https://widget.finnhub.io/widgets/stocks/chart?symbol=GS&theme=light"></iframe>
-    </a>
+    </div>
 
-    <a href="https://www.etoro.com/markets/MSFT" class="card">
-        <h2>Microsoft</h2>
+    <div class="card"><h3>Microsoft</h3>
         <iframe src="https://widget.finnhub.io/widgets/stocks/chart?symbol=MSFT&theme=light"></iframe>
-    </a>
+    </div>
 
-    <a href="https://www.etoro.com/de/markets/00857.hk" class="card">
-        <h2>PetroChina</h2>
+    <div class="card"><h3>PetroChina</h3>
         <iframe src="https://widget.finnhub.io/widgets/stocks/chart?symbol=0857.HK&theme=light"></iframe>
-    </a>
-
+    </div>
 </div>
 
 <div class="footer">
-    <img src="NewBulletinLogo.png" alt="Logo">
+    <div class="logo-wrapper" id="logoWrapper">
+        <canvas id="particles"></canvas>
+
+        <div class="logo-card">
+            <img src="NewBulletinLogo.png" class="logo">
+            <div class="logo-text">NEW BULLETIN</div>
+            <div class="ticker" id="ticker">Loading value...</div>
+        </div>
+    </div>
 </div>
 
 <script>
 function toggleDark() {
     document.body.classList.toggle("dark");
 }
+
+// 3D TILT
+const wrapper = document.getElementById("logoWrapper");
+
+wrapper.addEventListener("mousemove", (e) => {
+    const rect = wrapper.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const rotateX = (y / rect.height - 0.5) * -10;
+    const rotateY = (x / rect.width - 0.5) * 10;
+
+    wrapper.querySelector(".logo-card").style.transform =
+        `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+});
+
+wrapper.addEventListener("mouseleave", () => {
+    wrapper.querySelector(".logo-card").style.transform = "rotateX(0) rotateY(0)";
+});
+
+// PARTICLES
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
+
+let particles = [];
+
+for (let i = 0; i < 40; i++) {
+    particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2,
+        speedY: Math.random() * 0.5 + 0.2
+    });
+}
+
+function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "rgba(198,169,107,0.6)";
+
+    particles.forEach(p => {
+        p.y -= p.speedY;
+        if (p.y < 0) p.y = canvas.height;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    requestAnimationFrame(animateParticles);
+}
+
+animateParticles();
+
+// TICKER
+const ticker = document.getElementById("ticker");
+let value = 128.45;
+
+function updateTicker() {
+    const change = (Math.random() - 0.5) * 2;
+    value += change;
+
+    ticker.innerText =
+        "Brand Value Index: " + value.toFixed(2) +
+        (change >= 0 ? " ▲" : " ▼");
+
+    ticker.style.color = change >= 0 ? "#4caf50" : "#e53935";
+}
+
+setInterval(updateTicker, 2000);
+updateTicker();
 </script>
 
 </body>
