@@ -47,24 +47,25 @@ body {
     gap:15px;
 }
 
-.icon-button {
-    width:60px;
-    height:60px;
-    border-radius:15px;
-    background:var(--card);
-    backdrop-filter: blur(10px);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    transition:0.3s;
+/* Text Buttons */
+.text-button {
+    padding: 15px 25px;
+    border-radius: 12px;
+    background: var(--card);
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+    border: 2px solid transparent;
+    cursor: pointer;
 }
 
-.icon-button:hover {
-    transform:translateY(-5px);
-}
-
-.icon-button img {
-    width:60%;
+.text-button:hover {
+    background: #8B6F47;
+    color: white;
+    border-color: #ffffff50;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
 .toggle {
@@ -177,12 +178,10 @@ iframe {
 
 <div class="header">
     <div class="buttons-container">
-        <a href="https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1" class="icon-button">
-            <img src="Mail.png">
-        </a>
-        <a href="https://grigoriadisdionysios.de6.quickconnect.to/#/signin" class="icon-button">
-            <img src="GGdMS.png">
-        </a>
+        <a href="https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1" class="text-button">Mail</a>
+        <a href="https://grigoriadisdionysios.de6.quickconnect.to/#/signin" class="text-button">Server</a>
+        <a href="#dashboard" class="text-button">Dashboard</a>
+        <a href="#reports" class="text-button">Reports</a>
     </div>
 
     <div class="toggle" onclick="toggleDark()">Toggle Mode</div>
