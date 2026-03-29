@@ -1,140 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!DOCTYPE html>
-<html>
-<head>
-    <title>GRIGORIADIS GRUPPE</title>
-    <style>
-        body {
-            background-color: #ffffff;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GRIGORIADIS GRUPPE</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f5f5f5, #eaeaea);
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 40px;
+}
+
+/* ICON BUTTONS */
+.buttons-container {
+    display: flex;
+    gap: 20px;
+}
+
+.icon-button {
+    width: 65px;
+    height: 65px;
+    border-radius: 15px;
+    background: white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.icon-button img {
+    width: 60%;
+}
+
+.icon-button:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+/* TITLE + LINKS */
+.managing-assets {
+    text-align: right;
+}
+
+.managing-assets h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    color: #8B6F47;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+/* LINKS */
+.assets-links {
+    list-style: none;
+}
+
+.assets-links li {
+    margin-bottom: 14px;
+}
+
+.assets-links a {
+    text-decoration: none;
+    color: #555;
+    font-size: 17px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* fancy underline animation */
+.assets-links a::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background: linear-gradient(to right, #8B6F47, #c6a96b);
+    transition: width 0.3s ease;
+}
+
+.assets-links a:hover {
+    color: #000;
+}
+
+.assets-links a:hover::after {
+    width: 100%;
+}
+
+/* FOOTER */
+.footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 40px;
+}
+
+.footer img {
+    max-width: 180px;
+    opacity: 0.85;
+    transition: 0.3s;
+}
+
+.footer img:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+</style>
+
 </head>
-</body>
-</html>
-<title>Managing Assets</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: Tahoma, sans-serif;
-            background-color: #f5f5f5;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 20px;
-        }
-        
-        .buttons-container {
-            display: flex;
-            gap: 15px;
-        }       
-        .icon-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .icon-button img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        
-        .icon-button:hover {
-            opacity: 0.8;
-            transform: scale(1.05);
-            transition: all 0.3s ease;
-        }
-        
-        .managing-assets {
-            text-align: right;
-            padding-right: 30px;
-            flex: 1;
-        }       
-        .managing-assets h1 {
-            color: #8B6F47;
-            font-size: 28px;
-            margin-bottom: 20px;
-            font-family: Tahoma;
-        }
-        
-        .assets-links {
-            list-style: none;
-        }
-        
-        .assets-links li {
-            margin-bottom: 12px;
-        }
-        
-        .assets-links a {
-            color: #8B6F47;
-            text-decoration: none;
-            font-size: 16px;
-            font-family: Tahoma;
-            transition: all 0.3s ease;
-        }
-        
-        .assets-links a:hover {
-            text-decoration: underline;
-            font-weight: bold;
-        }       
-        .footer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 30px 20px;
-            border-top: 1px solid #ddd;
-        }
-        
-        .footer img {
-            max-width: 200px;
-            height: auto;
-        }
-    </style>
-</head>
+
 <body>
-    <div class="header">
-        <div class="buttons-container">
-            <a href="https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1" class="icon-button" title="Mail">
-                <img src="Mail.png" alt="Mail" />
-            </a>
-            <a href="https://grigoriadisdionysios.de6.quickconnect.to/#/signin" class="icon-button" title="GGdMS">
-                <img src="GGdMS.png" alt="GGdMS" />
-            </a>       </div>
-        <div class="managing-assets">
-            <h1>Managing Assets</h1>
-            <ul class="assets-links">
-                <li><a href="https://www.etoro.com/markets/JPM">JP Morgan Chase & Co</a></li>
-                <li><a href="https://www.etoro.com/markets/RHM.DE">Rheinmetall AG</a></li>
-                <li><a href="https://www.etoro.com/markets/GS">Goldman Sachs Group Inc</a></li>
-                <li><a href="https://www.etoro.com/markets/MSFT">Microsoft</a></li>
-                <li><a href="https://www.etoro.com/de/markets/00857.hk">PetroChina</a></li>
-            </ul>
-        </div>
+
+<div class="header">
+
+    <div class="buttons-container">
+        <a href="https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1" class="icon-button">
+            <img src="Mail.png" alt="Mail">
+        </a>
+
+        <a href="https://grigoriadisdionysios.de6.quickconnect.to/#/signin" class="icon-button">
+            <img src="GGdMS.png" alt="GGdMS">
+        </a>
     </div>
-    
-    <div class="footer">
-        <img src="NewBulletinLogo.png" alt="New Bulletin Logo" />
+
+    <div class="managing-assets">
+        <h1>Managing Assets</h1>
+
+        <ul class="assets-links">
+            <li><a href="https://www.etoro.com/markets/JPM">JP Morgan Chase & Co</a></li>
+            <li><a href="https://www.etoro.com/markets/RHM.DE">Rheinmetall AG</a></li>
+            <li><a href="https://www.etoro.com/markets/GS">Goldman Sachs Group Inc</a></li>
+            <li><a href="https://www.etoro.com/markets/MSFT">Microsoft</a></li>
+            <li><a href="https://www.etoro.com/de/markets/00857.hk">PetroChina</a></li>
+        </ul>
     </div>
+
+</div>
+
+<div class="footer">
+    <img src="NewBulletinLogo.png" alt="Logo">
+</div>
+
 </body>
 </html>
