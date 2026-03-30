@@ -13,31 +13,33 @@
 :root {
     --bg:#f5f5f5;
     --text:#222;
-    --card:rgba(255,255,255,0.7);
+    --card:#ffffff;
+    --card-hover:#f2f2f2;
     --primary:#8B6F47;
     --primary-hover:#A08353;
 }
-body{margin:0;font-family:'Playfair Display', serif;background:var(--bg);color:var(--text);transition:0.3s;}
-.tabs {display:flex; flex-wrap:wrap; justify-content:center; background:var(--card); border-radius:12px; margin:20px auto; overflow:hidden; max-width:1000px;}
-.tab {flex:1; text-align:center; padding:15px 20px; cursor:pointer; font-weight:600; border-bottom:3px solid transparent; transition:0.3s;}
-.tab:hover{background:rgba(0,0,0,0.05);}
+body{margin:0;font-family:'Inter', sans-serif;background:var(--bg);color:var(--text);transition:0.3s;}
+.tabs {display:flex; flex-wrap:wrap; justify-content:center; background:var(--card); border-radius:12px; margin:20px auto; overflow:hidden; max-width:1100px; box-shadow:0 4px 15px rgba(0,0,0,0.05);}
+.tab {flex:1; text-align:center; padding:15px 20px; cursor:pointer; font-weight:600; border-bottom:3px solid transparent; transition:0.3s; font-family:'Playfair Display', serif;}
+.tab:hover{background:var(--card-hover);}
 .tab.active{border-bottom:3px solid var(--primary); background:var(--primary); color:white;}
 .link-label{font-size:12px; color:#A08353; margin-left:4px;}
 .title{text-align:center;margin-top:20px;}
-.title h1{font-size:42px;color:var(--primary);}
-.dashboard{display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:25px; padding:40px;}
-.card{padding:20px;border-radius:20px;background:var(--card);backdrop-filter: blur(12px);transition:0.3s;}
-.card:hover{transform: translateY(-8px);}
-canvas{width:100%; height:200px;}
+.title h1{font-size:44px;color:var(--primary); letter-spacing:1px;}
+.dashboard{display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:25px; padding:40px;}
+.card{padding:25px;border-radius:20px;background:var(--card);backdrop-filter: blur(12px);transition:0.4s; box-shadow:0 8px 20px rgba(0,0,0,0.05);}
+.card:hover{transform: translateY(-8px); box-shadow:0 12px 25px rgba(0,0,0,0.15);}
+canvas{width:100%; height:220px;}
 .footer{display:flex;justify-content:center;padding:80px 20px;flex-direction:column;align-items:center;position:relative;}
 .logo-wrapper{position: relative; perspective:1000px;}
-.logo-card{position: relative; padding:30px 50px; border-radius:25px; background:rgba(255,255,255,0.06); backdrop-filter:blur(20px); text-align:center;}
+.logo-card{position: relative; padding:30px 50px; border-radius:25px; background:rgba(255,255,255,0.06); backdrop-filter:blur(20px); text-align:center; transition:0.3s;}
 .logo{width:180px; opacity:0; transform:translateY(20px); animation:fadeIn 1.2s ease forwards;}
 .logo-text{margin-top:15px; letter-spacing:3px; font-size:14px; color:var(--primary); opacity:0; animation:fadeIn 1.5s ease forwards;}
 .contact-button{position:fixed; bottom:20px; right:20px; padding:15px 30px; background:var(--primary); color:white;font-weight:600; text-decoration:none; border-radius:12px; transition:0.3s; z-index:999;}
-.contact-button:hover{background:var(--primary-hover); transform:translateY(-3px); box-shadow:0 5px 15px rgba(0,0,0,0.2);}
-#scopeContainer{padding:40px; max-width:1000px; margin:20px auto; border-radius:20px; background:white; display:none;}
-#downloadPDF{margin-top:20px;padding:10px 20px;background:#8B6F47;color:white;border:none;border-radius:8px;cursor:pointer;}
+.contact-button:hover{background:var(--primary-hover); transform:translateY(-3px); box-shadow:0 5px 15px rgba(0,0,0,0.25);}
+#scopeContainer{padding:40px; max-width:1100px; margin:20px auto; border-radius:20px; background:white; display:none; box-shadow:0 8px 25px rgba(0,0,0,0.05);}
+#downloadPDF{margin-top:20px;padding:12px 24px;background:var(--primary);color:white;border:none;border-radius:10px;cursor:pointer;transition:0.3s;}
+#downloadPDF:hover{background:var(--primary-hover); transform:translateY(-2px);}
 @keyframes fadeIn { to { opacity:1; transform:translateY(0); } }
 @media(max-width:768px){ .dashboard{grid-template-columns:1fr;} }
 </style>
@@ -104,7 +106,7 @@ tabEls.forEach(tab=>{
   });
 });
 
-// Last week stock data
+// Example: last week stock prices (replace with Supabase fetch)
 const lastWeekData = {
   "JPM": 145.2,
   "MSFT": 298.5,
@@ -119,48 +121,29 @@ function loadDashboard(){
   const labels = Object.keys(lastWeekData);
   const prices = Object.values(lastWeekData);
 
-  // Last Week Stock Prices
-  const card1 = document.createElement("div");
-  card1.className="card";
-  card1.innerHTML=`<h3>Last Week Stock Prices</h3><canvas></canvas>`;
-  dashboardContainer.appendChild(card1);
-  new Chart(card1.querySelector("canvas").getContext("2d"),{
-    type:"bar",
-    data:{labels,datasets:[{label:"Price USD",data:prices,backgroundColor:"#8B6F47"}]},
-    options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false}}}
-  });
+  const chartConfigs = [
+    {title:"Last Week Stock Prices", type:"bar", data:prices, labels:labels, background:"#8B6F47"},
+    {title:"Revenue Chart", type:"bar", data:[120,190,55,80,65], labels:["JP Morgan","Microsoft","Goldman Sachs","Rheinmetall","PetroChina"], background:"#8B6F47"},
+    {title:"Profit Line", type:"line", data:[35,40,45,61], labels:["Q1","Q2","Q3","Q4"], borderColor:"#C6A96B"},
+    {title:"Market Share Pie", type:"pie", data:[25,30,15,10,20], labels:["JP Morgan","Microsoft","Goldman Sachs","Rheinmetall","PetroChina"], backgroundColors:["#8B6F47","#C6A96B","#D4B35B","#E3C88D","#A67C52"]}
+  ];
 
-  // Revenue Chart
-  const revenueCard=document.createElement("div");
-  revenueCard.className="card";
-  revenueCard.innerHTML=`<h3>Revenue Chart</h3><canvas></canvas>`;
-  dashboardContainer.appendChild(revenueCard);
-  new Chart(revenueCard.querySelector("canvas").getContext("2d"),{
-    type:"bar",
-    data:{labels:["JP Morgan","Microsoft","Goldman Sachs","Rheinmetall","PetroChina"],
-          datasets:[{label:"Revenue (B USD)",data:[120,190,55,80,65],backgroundColor:"#8B6F47"}]}
-  });
-
-  // Profit Line
-  const profitCard=document.createElement("div");
-  profitCard.className="card";
-  profitCard.innerHTML=`<h3>Profit Line</h3><canvas></canvas>`;
-  dashboardContainer.appendChild(profitCard);
-  new Chart(profitCard.querySelector("canvas").getContext("2d"),{
-    type:"line",
-    data:{labels:["Q1","Q2","Q3","Q4"],datasets:[{label:"Profit (B USD)",data:[35,40,45,61],borderColor:"#C6A96B",fill:false}]}
-  });
-
-  // Market Share Pie
-  const pieCard=document.createElement("div");
-  pieCard.className="card";
-  pieCard.innerHTML=`<h3>Market Share Pie</h3><canvas></canvas>`;
-  dashboardContainer.appendChild(pieCard);
-  new Chart(pieCard.querySelector("canvas").getContext("2d"),{
-    type:"pie",
-    data:{labels:["JP Morgan","Microsoft","Goldman Sachs","Rheinmetall","PetroChina"],
-          datasets:[{label:"Market Share %",data:[25,30,15,10,20],
-                     backgroundColor:["#8B6F47","#C6A96B","#D4B35B","#E3C88D","#A67C52"]}]}
+  chartConfigs.forEach(cfg=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`<h3>${cfg.title}</h3><canvas></canvas>`;
+    dashboardContainer.appendChild(card);
+    const ctx = card.querySelector("canvas").getContext("2d");
+    let chartData, options={responsive:true, plugins:{legend:{display:true}}};
+    if(cfg.type==="pie"){
+      chartData={labels:cfg.labels,datasets:[{label:cfg.title,data:cfg.data,backgroundColor:cfg.backgroundColors}]};
+    } else if(cfg.type==="line"){
+      chartData={labels:cfg.labels,datasets:[{label:cfg.title,data:cfg.data,borderColor:cfg.borderColor,fill:false}]};
+    } else {
+      chartData={labels:cfg.labels,datasets:[{label:cfg.title,data:cfg.data,backgroundColor:cfg.background}]};
+      options.plugins.legend.display=false;
+    }
+    new Chart(ctx,{type:cfg.type,data:chartData,options:options});
   });
 }
 
