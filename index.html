@@ -1,257 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GRIGORIADIS GRUPPE</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GRIGORIADIS GRUPPE – Wealth Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-:root{
---bg:#f5f5f5;
---card:rgba(255,255,255,0.8);
---text:#1a1a1a;
---primary:#8B6F47;
---accent:#C6A96B;
+:root {
+    --bg:#f5f5f5;
+    --text:#222;
+    --card:rgba(255,255,255,0.7);
+    --primary:#8B6F47;
+    --primary-hover:#A08353;
 }
-
-body{margin:0;font-family:'Inter';background:var(--bg);color:var(--text);}
-
-/* HEADER */
-.header{
-display:flex;justify-content:space-between;align-items:center;
-padding:25px 40px;
-}
-
-/* BRAND */
-.brand{
-font-family:'Playfair Display';
-font-size:22px;
-letter-spacing:2px;
-color:var(--primary);
-}
-
-/* TABS */
-.tabs{
-display:flex;gap:10px;padding:10px 40px 20px;flex-wrap:wrap;
-}
-.tab{
-padding:10px 16px;border-radius:10px;cursor:pointer;
-transition:0.2s;
-}
+body{margin:0;font-family:'Playfair Display', serif;background:var(--bg);color:var(--text);transition:0.3s;}
+.tabs {display:flex; justify-content:center; background:var(--card); border-radius:12px; margin:20px auto; overflow:hidden; max-width:1000px;}
+.tab {flex:1; text-align:center; padding:15px 20px; cursor:pointer; font-weight:600; border-bottom:3px solid transparent; transition:0.3s;}
 .tab:hover{background:rgba(0,0,0,0.05);}
-.tab.active{background:var(--primary);color:white;}
-
-.link-label{font-size:11px;margin-left:5px;opacity:0.6;}
-
-/* GRID */
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:25px;
-padding:30px 40px;
-}
-
-/* CARD */
-.card{
-background:var(--card);
-border-radius:18px;
-padding:25px;
-backdrop-filter:blur(12px);
-box-shadow:0 10px 30px rgba(0,0,0,0.05);
-}
-
-/* FOOTER LOGO */
-.footer{
-display:flex;
-justify-content:center;
-padding:80px 20px;
-}
-.logo-card{
-padding:30px 50px;
-border-radius:25px;
-background:rgba(255,255,255,0.6);
-text-align:center;
-}
+.tab.active{border-bottom:3px solid var(--primary); background:var(--primary); color:white;}
+.title{text-align:center;margin-top:20px;}
+.title h1{font-size:42px;color:var(--primary);}
+.dashboard{display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:25px; padding:40px;}
+.card{padding:20px;border-radius:20px;background:var(--card);backdrop-filter: blur(12px);transition:0.3s;}
+.card:hover{transform: translateY(-8px);}
+canvas{width:100%; height:200px;}
+.footer{display:flex;justify-content:center;padding:80px 20px;flex-direction:column;align-items:center;position:relative;}
+.logo-card{position: relative; padding:30px 50px; border-radius:25px; background:rgba(255,255,255,0.06); backdrop-filter:blur(20px); text-align:center;}
 .logo{width:180px;}
-.logo-text{margin-top:10px;letter-spacing:3px;color:var(--primary);}
-
-/* ABOUT */
-.about{display:flex;gap:30px;}
-.about a{color:var(--primary);cursor:pointer;}
-
-/* BUTTON */
-.btn{
-background:var(--primary);
-color:white;
-padding:12px 20px;
-border-radius:10px;
-cursor:pointer;
-margin-top:10px;
-display:inline-block;
-}
+.logo-text{margin-top:15px; letter-spacing:3px; font-size:14px; color:var(--primary);}
+.contact-button{position:fixed; bottom:20px; right:20px; padding:15px 30px; background:var(--primary); color:white;font-weight:600; text-decoration:none; border-radius:12px; transition:0.3s; z-index:999;}
+.contact-button:hover{background:var(--primary-hover); transform:translateY(-3px); box-shadow:0 5px 15px rgba(0,0,0,0.2);}
+#scopeContainer{padding:40px; max-width:1000px; margin:20px auto; border-radius:20px;}
 </style>
 </head>
-
 <body>
 
-<div class="header">
-<div class="brand">GRIGORIADIS GRUPPE</div>
-<div>Private Wealth Management</div>
-</div>
-
 <div class="tabs">
-<div class="tab active" data-tab="dashboard">Dashboard</div>
-<div class="tab" data-tab="reports">Reports</div>
-
-<div class="tab external" data-url="https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1">
-Mail <span class="link-label">(link)</span>
+  <div class="tab active" data-tab="dashboard">Dashboard</div>
+  <div class="tab" data-tab="scope">Scope</div>
 </div>
 
-<div class="tab external" data-url="https://grigoriadisdionysios.de6.quickconnect.to/#/signin">
-Server <span class="link-label">(link)</span>
+<div class="title"><h1>Managing Assets</h1></div>
+
+<div id="dashboardContainer" class="dashboard"></div>
+
+<div id="scopeContainer" class="card" style="background:white;display:none;">
+<h3>Scope</h3>
+<p>GRIGORIADIS GRUPPE is a private Family Wealth Management for its members. No fees are issued for the service for any members. Our scope is to invest your funds in assets to grow them further with low-risk solutions. The monthly withdrawal funds is set based on how many members are using the service.</p>
 </div>
 
-<div class="tab external" data-url="https://www.etoro.com">
-Portfolio <span class="link-label">(link)</span>
-</div>
-
-<div class="tab" data-tab="about">Scope</div>
-</div>
-
-<div id="app" class="grid"></div>
-
-<!-- SCOPE -->
-<div id="about-template" style="display:none;">
-<div class="about">
-<div>
-<a data-id="s1">Scope</a>
-</div>
-
-<div>
-<h3 id="s1">§01sub01 Scope</h3>
-
-<p><strong>GRIGORIADIS GRUPPE</strong> operates as a private family wealth management entity dedicated exclusively to its members. No fees are charged for any services provided.</p>
-
-<p>The firm focuses on the preservation and strategic growth of capital through disciplined, low-risk investment strategies.</p>
-
-<p>Investments are allocated across diversified assets and global markets, ensuring stability and long-term value creation.</p>
-
-<p>Monthly withdrawals are predefined and proportionally structured based on the number of active members utilizing the service.</p>
-
-</div>
-</div>
-</div>
-
-<!-- FOOTER -->
 <div class="footer">
-<div class="logo-card">
-<img src="NewBulletinLogo-removebg-preview.png" class="logo">
-<div class="logo-text">Investing in Talent.</div>
+    <div class="logo-card">
+        <img src="logo.png" class="logo">
+        <div class="logo-text">Investing in Talent.</div>
+    </div>
 </div>
-</div>
+
+<a href="mailto:quality@grigoriadisgruppe.ch" class="contact-button">Contact Us</a>
 
 <script>
-const app=document.getElementById("app");
+// Tabs
+const tabEls = document.querySelectorAll(".tab");
+const dashboardContainer = document.getElementById("dashboardContainer");
+const scopeContainer = document.getElementById("scopeContainer");
 
-/* LAST WEEK DATA */
-const stocks = {
-labels:["JP Morgan","Microsoft","Goldman Sachs","Rheinmetall","PetroChina"],
-prices:[145, 320, 380, 510, 6],
-lastWeek:[140, 310, 370, 480, 5.5]
+tabEls.forEach(tab => tab.addEventListener("click", () => {
+  tabEls.forEach(t => t.classList.remove("active"));
+  tab.classList.add("active");
+  if(tab.dataset.tab==="dashboard"){
+    scopeContainer.style.display="none";
+    dashboardContainer.style.display="grid";
+    loadDashboard();
+  } else {
+    dashboardContainer.style.display="none";
+    scopeContainer.style.display="block";
+  }
+}));
+
+// Example data (replace with backend API fetch)
+const lastWeekData = {
+  "JPM": 145.2,
+  "MSFT": 298.5,
+  "GS": 375.1,
+  "RHM.DE": 120.4,
+  "0857.HK": 5.7
 };
 
-/* DASHBOARD */
-function dashboard(){
-app.innerHTML="";
+function loadDashboard(){
+  dashboardContainer.innerHTML="";
+  const labels = Object.keys(lastWeekData);
+  const prices = Object.values(lastWeekData);
 
-app.innerHTML=`
-<div class="card"><h3>Weekly Performance</h3><canvas id="chart"></canvas></div>
-<div class="card"><h3>Allocation</h3><canvas id="pie"></canvas></div>
-<div class="card"><h3>Insights</h3><div id="insights"></div></div>
-<div class="card"><h3>Report</h3><div class="btn" onclick="downloadPDF()">Download Weekly Report</div></div>
-`;
+  const card = document.createElement("div");
+  card.className="card";
+  card.innerHTML=`<h3>Last Week Stock Prices</h3><canvas id="weekChart"></canvas>`;
+  dashboardContainer.appendChild(card);
 
-new Chart(document.getElementById("chart"),{
-type:"bar",
-data:{
-labels:stocks.labels,
-datasets:[
-{label:"Last Week",data:stocks.lastWeek,backgroundColor:"#C6A96B"},
-{label:"This Week",data:stocks.prices,backgroundColor:"#8B6F47"}
-]
-}
-});
-
-new Chart(document.getElementById("pie"),{
-type:"pie",
-data:{
-labels:["Equities","Private Equity","Cash"],
-datasets:[{data:[50,30,20],backgroundColor:["#8B6F47","#C6A96B","#999"]}]
-}
-});
-
-/* INSIGHTS */
-let insight="";
-stocks.prices.forEach((p,i)=>{
-const diff=p-stocks.lastWeek[i];
-insight+=`${stocks.labels[i]}: ${diff>0?"+":""}${diff}<br>`;
-});
-document.getElementById("insights").innerHTML=insight;
+  const ctx = document.getElementById("weekChart").getContext("2d");
+  new Chart(ctx,{
+    type:"bar",
+    data:{labels, datasets:[{label:"Price USD",data:prices, backgroundColor:"#8B6F47"}]},
+    options:{responsive:true, plugins:{legend:{display:false}}}
+  });
 }
 
-/* REPORT */
-function reports(){
-dashboard();
+// PDF report placeholder (expand with jsPDF)
+function generatePDF(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text("GRIGORIADIS GRUPPE – Weekly Report", 20, 20);
+  doc.save("weekly-report.pdf");
 }
-
-/* PDF */
-function downloadPDF(){
-const {jsPDF}=window.jspdf;
-const doc=new jsPDF();
-doc.text("Weekly Portfolio Report",20,20);
-
-stocks.labels.forEach((s,i)=>{
-doc.text(`${s}: ${stocks.lastWeek[i]} → ${stocks.prices[i]}`,20,40+i*10);
-});
-
-doc.save("weekly-report.pdf");
-}
-
-/* ABOUT */
-function about(){
-app.innerHTML="";
-const div=document.createElement("div");
-div.className="card";
-div.innerHTML=document.getElementById("about-template").innerHTML;
-app.appendChild(div);
-
-div.querySelectorAll("a").forEach(a=>{
-a.onclick=()=>document.getElementById(a.dataset.id).scrollIntoView({behavior:"smooth"});
-});
-}
-
-/* TABS */
-document.querySelectorAll(".tab").forEach(tab=>{
-tab.onclick=()=>{
-if(tab.classList.contains("external")){
-window.open(tab.dataset.url,"_blank");
-return;
-}
-
-document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-tab.classList.add("active");
-
-if(tab.dataset.tab==="dashboard") dashboard();
-if(tab.dataset.tab==="reports") reports();
-if(tab.dataset.tab==="about") about();
-};
-});
-
-dashboard();
 </script>
 
 </body>
