@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>GRIGORIADIS GRUPPE – Live Stocks</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -15,29 +15,22 @@
     --card:rgba(255,255,255,0.7);
     --primary:#8B6F47;
     --primary-hover:#A08353;
-    --link-color:#888888;
 }
 body.dark { --bg:#0f1115; --text:#eaeaea; --card:rgba(255,255,255,0.05); }
 
 *{margin:0;padding:0;box-sizing:border-box;}
-body{
-    font-family:'Playfair Display', serif;
-    background:var(--bg);
-    color:var(--text);
-    transition:0.3s;
-}
+body{font-family:'Playfair Display', serif;background:var(--bg);color:var(--text);transition:0.3s;}
 
-/* TABS */
+/* TAB HEADER */
 .tabs {
   display:flex;
+  flex-wrap:wrap;
   justify-content:center;
   background:var(--card);
   border-radius:12px;
   margin:20px auto;
   overflow:hidden;
-  max-width:900px;
-  flex-wrap:wrap;
-  font-family:'Playfair Display', serif;
+  max-width:1000px;
 }
 .tab {
   flex:1;
@@ -47,7 +40,6 @@ body{
   font-weight:600;
   border-bottom:3px solid transparent;
   transition:0.3s;
-  min-width:120px;
   font-family:'Playfair Display', serif;
 }
 .tab:hover{ background:rgba(0,0,0,0.05); }
@@ -56,28 +48,30 @@ body{
   background:var(--primary);
   color:white;
 }
-.tab .link-text {
-  font-size:0.7em;
-  color:var(--link-color);
-  margin-left:5px;
-  font-family:'Playfair Display', serif;
+
+/* SMALL LINK LABEL */
+.link-label{
+    font-size:12px;
+    color:#A08353;
+    margin-left:4px;
 }
 
 /* TITLE */
 .title{text-align:center;margin-top:20px;}
-.title h1{font-size:42px; color:var(--primary);}
+.title h1{font-family:'Playfair Display', serif; font-size:42px; color:var(--primary);}
 
 /* DASHBOARD */
 .dashboard{
     display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:25px; padding:40px;
 }
-.card{ padding:20px; border-radius:20px; background:var(--card); backdrop-filter: blur(12px); transition:0.3s; font-family:'Playfair Display', serif; }
+.card{ padding:20px; border-radius:20px; background:var(--card); backdrop-filter: blur(12px); transition:0.3s; }
 .card:hover{ transform: translateY(-8px); }
-canvas{ width:100%; height:200px; border:none; font-family:'Playfair Display', serif; }
+canvas{ width:100%; height:200px; border:none; }
 
 /* FOOTER */
-.footer{display:flex;justify-content:center;padding:60px 20px;flex-direction:column;align-items:center;position:relative;}
+.footer{display:flex;justify-content:center;padding:80px 20px;flex-direction:column;align-items:center;position:relative;}
 .logo-wrapper{position: relative; perspective:1000px;}
+#particles{position:absolute;top:0;left:0;width:100%;height:100%;}
 .logo-card{position: relative; padding:30px 50px; border-radius:25px; background:rgba(255,255,255,0.06); backdrop-filter:blur(20px); text-align:center;}
 .logo{width:180px; opacity:0; transform:translateY(20px); animation:fadeIn 1.2s ease forwards;}
 .logo-text{margin-top:15px; letter-spacing:3px; font-size:14px; color:var(--primary); opacity:0; animation:fadeIn 1.5s ease forwards;}
@@ -85,28 +79,40 @@ canvas{ width:100%; height:200px; border:none; font-family:'Playfair Display', s
 /* CONTACT BUTTON */
 .contact-button{
     position:fixed; bottom:20px; right:20px; padding:15px 30px; background:var(--primary); color:white;
-    font-weight:600; text-decoration:none; border-radius:12px; transition:0.3s; z-index:999; font-family:'Playfair Display', serif;
+    font-weight:600; text-decoration:none; border-radius:12px; transition:0.3s; z-index:999;
 }
 .contact-button:hover{ background:var(--primary-hover); transform:translateY(-3px); box-shadow:0 5px 15px rgba(0,0,0,0.2); }
 
-/* RESPONSIVE */
-@media (max-width: 768px){
-  .dashboard{display:flex; flex-direction:column; gap:20px; padding:20px;}
-}
-
 @keyframes fadeIn { to { opacity:1; transform:translateY(0); } }
+
+/* ABOUT US */
+.about-container{display:flex; flex-direction:row; gap:30px; overflow:hidden;}
+.about-sidebar{flex:0 0 220px; max-height:700px; overflow-y:auto; border-right:1px solid rgba(0,0,0,0.1); padding-right:15px;}
+.about-sidebar h3{font-size:18px; margin-bottom:15px;}
+.about-sidebar ul{list-style:none; padding:0; line-height:1.8;}
+.about-sidebar a{color:#8B6F47; text-decoration:none; cursor:pointer;}
+.about-content{flex:1; max-height:700px; overflow-y:auto; padding-left:15px;}
+.about-content h3,h4,p,li{margin-bottom:12px;}
+.about-content ul{margin-left:20px;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .about-container{flex-direction:column;}
+  .about-sidebar{max-height:150px; overflow-x:auto; border-right:none; border-bottom:1px solid rgba(0,0,0,0.1); padding:5px;}
+  .about-sidebar ul{display:flex; gap:15px;}
+}
 </style>
 </head>
-
 <body>
 
 <!-- TABS -->
 <div class="tabs">
   <div class="tab active" data-tab="dashboard">Dashboard</div>
   <div class="tab" data-tab="reports">Reports</div>
-  <div class="tab external" data-url="https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1">Mail <span class="link-text">(link)</span></div>
-  <div class="tab external" data-url="https://grigoriadisdionysios.de6.quickconnect.to/#/signin">Server <span class="link-text">(link)</span></div>
-  <div class="tab external" data-url="https://www.etoro.com">Portfolio <span class="link-text">(link)</span></div>
+  <div class="tab external" data-url="https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1">Mail <span class="link-label">(link)</span></div>
+  <div class="tab external" data-url="https://grigoriadisdionysios.de6.quickconnect.to/#/signin">Server <span class="link-label">(link)</span></div>
+  <div class="tab external" data-url="https://www.etoro.com">Portfolio <span class="link-label">(link)</span></div>
+  <div class="tab" data-tab="about">About Us</div>
 </div>
 
 <div class="title"><h1>Managing Assets</h1></div>
@@ -114,6 +120,7 @@ canvas{ width:100%; height:200px; border:none; font-family:'Playfair Display', s
 
 <div class="footer">
     <div class="logo-wrapper" id="logoWrapper">
+        <canvas id="particles"></canvas>
         <div class="logo-card">
             <img src="NewBulletinLogo-removebg-preview.png" class="logo">
             <div class="logo-text">Investing in Talent.</div>
@@ -123,8 +130,63 @@ canvas{ width:100%; height:200px; border:none; font-family:'Playfair Display', s
 
 <a href="mailto:quality@grigoriadisgruppe.ch" class="contact-button">Contact Us</a>
 
+<!-- About Us Template -->
+<div id="about-template" style="display:none;">
+<div class="about-sidebar">
+<h3>Index</h3>
+<ul>
+<li><a data-target="section1">§01sub01 Scope</a></li>
+<li><a data-target="section2">§01sub02 Policies</a></li>
+<li><a data-target="section3">§01sub03 Partnership</a></li>
+</ul>
+</div>
+<div class="about-content">
+<h3 id="section1">Policy - §01sub01PMG Scope of the Firm</h3>
+<p><strong>Purpose:</strong> To define the scope of the Firm’s activities, investment focus, and strategic boundaries.</p>
+<p><strong>Scope:</strong> Applies to all strategic, investment, partnership, and operational decisions.</p>
+<p><strong>Policy Statement:</strong> The Firm may invest in smaller companies, businesses, and specialist talents without limitation, provided visible profit potential exists.</p>
+<p><strong>Investment Scope:</strong></p>
+<ul>
+<li>Investment in early-stage or small-scale companies</li>
+<li>Investment in individual specialist talents and expertise</li>
+<li>Participation in diverse industries, sectors, and business themes</li>
+<li>Engagement in opportunities across all markets and regions</li>
+</ul>
+<p><strong>Investment Criteria:</strong></p>
+<ul>
+<li>Clearly identifiable profit opportunity</li>
+<li>Commercial viability and value creation potential</li>
+<li>Align with risk appetite defined by Managing Director</li>
+<li>Comply with legal/regulatory requirements</li>
+</ul>
+<p><strong>Governance & Oversight:</strong> Final approval rests with Managing Director. Decisions documented for transparency.</p>
+<p><strong>Review & Continuous Evaluation:</strong> Periodic review to ensure relevance and effectiveness.</p>
+
+<h3 id="section2">Policy - §01sub02PMG Managing Policies</h3>
+<p><strong>Purpose:</strong> Ensure effective planning, operation, control, and oversight of departments.</p>
+<p><strong>Scope:</strong> Applies to all departments; governs leaders, documentation, reporting.</p>
+<p><strong>Roles & Responsibilities:</strong></p>
+<ul>
+<li>CEO ensures resources for Board of Directors.</li>
+<li>Managing Director appoints/approves supervisors, controls documentation, reviews reports.</li>
+<li>Key Account Manager ensures customer/business partner contact.</li>
+<li>Supervisors lead departments, ensure compliance, report performance and risks.</li>
+<li>Financial Advisor oversees market shares and investments, reports quarterly.</li>
+</ul>
+<p><strong>Documented Info & Process Control:</strong> ISO 9001:2015 Clause 7.5; info approved, updated, accessible.</p>
+<p><strong>Compliance & Monitoring:</strong> Mandatory; corrective actions for noncompliance.</p>
+<p><strong>Related ISO 9001 Clauses:</strong> 5.3, 7.5, 8.1, 9.1, 10.2</p>
+
+<h3 id="section3">Policy - §01sub03PMG Partnership Duties</h3>
+<p>Contracts must show profit, benefits, and growth; clear terms; resources provided; standard partnership investing.</p>
+</div>
+</div>
+
 <script>
-// --- 3D LOGO TILT ---
+// DARK MODE
+function toggleDark(){document.body.classList.toggle("dark");}
+
+// 3D LOGO TILT
 const wrapper=document.getElementById("logoWrapper");
 wrapper.addEventListener("mousemove",e=>{
     const rect=wrapper.getBoundingClientRect();
@@ -134,7 +196,16 @@ wrapper.addEventListener("mousemove",e=>{
 });
 wrapper.addEventListener("mouseleave",()=>{wrapper.querySelector(".logo-card").style.transform="rotateX(0) rotateY(0)";});
 
-// --- STOCKS ---
+// PARTICLES
+const canvas=document.getElementById("particles"), ctx=canvas.getContext("2d");
+canvas.width=canvas.offsetWidth; canvas.height=canvas.offsetHeight;
+let particles=[]; for(let i=0;i<40;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,size:Math.random()*2,speedY:Math.random()*0.5+0.2});}
+function animateParticles(){ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle="rgba(198,169,107,0.6)";
+particles.forEach(p=>{p.y-=p.speedY; if(p.y<0)p.y=canvas.height; ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill();});
+requestAnimationFrame(animateParticles);}
+animateParticles();
+
+// STOCKS
 const stockList = [
   { symbol:"JPM", title:"JP Morgan" },
   { symbol:"MSFT", title:"Microsoft" },
@@ -145,14 +216,14 @@ const stockList = [
 let stockPrices = {};
 let liveChart;
 
-// --- TABS DATA ---
+// TABS DATA
 const container = document.getElementById("dashboardContainer");
 const tabsData = {
   dashboard: [
     { title:"Live Stock Prices", id:"livePrices" },
     { title:"Live Chart", type:"line", chartData:{
       labels: stockList.map(s=>s.title),
-      datasets:[{label:"Price USD", data: stockList.map(()=>0), borderColor:"#8B6F47", fill:false, tension:0.4}]
+      datasets:[{label:"Price USD", data: stockList.map(()=>0), borderColor:"#8B6F47", fill:false}]
     }}
   ],
   reports: [
@@ -162,7 +233,7 @@ const tabsData = {
     }},
     { title:"Profit Line", type:"line", chartData:{
       labels:["Q1","Q2","Q3","Q4"],
-      datasets:[{label:"Profit (B USD)",data:[35,40,45,61],borderColor:"#C6A96B",fill:false, tension:0.4}]
+      datasets:[{label:"Profit (B USD)",data:[35,40,45,61],borderColor:"#C6A96B",fill:false}]
     }},
     { title:"Market Share Pie", type:"pie", chartData:{
       labels:["JP Morgan","Microsoft","Goldman Sachs","Rheinmetall","PetroChina"],
@@ -171,16 +242,16 @@ const tabsData = {
   ]
 };
 
-// --- FETCH LIVE STOCK PRICES ---
+// FETCH PRICES
 async function fetchPrice(symbol){
   try{
-    const res = await fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbol}`);
+    const res = await fetch(`https://financialmodelingprep.com/api/v3/quote-short/${symbol}?apikey=demo`);
     const data = await res.json();
-    return data.quoteResponse.result[0]?.regularMarketPrice || 0;
+    return data[0]?.price || 0;
   } catch(e){ return 0; }
 }
 
-// --- UPDATE LIVE STOCKS ---
+// UPDATE LIVE
 async function updateLivePrices(){
   const liveDiv = document.getElementById("livePrices");
   if(!liveDiv) return;
@@ -196,8 +267,8 @@ async function updateLivePrices(){
   }
 }
 
-// --- LOAD TAB ---
-async function loadTab(tabName, url){
+// LOAD TAB
+async function loadTab(tabName){
   container.innerHTML="";
   if(tabName==="dashboard"){
     const liveDiv=document.createElement("div");
@@ -211,20 +282,11 @@ async function loadTab(tabName, url){
       card.innerHTML=`<h3>${item.title}</h3><canvas></canvas>`;
       container.appendChild(card);
       const ctx = card.querySelector("canvas").getContext("2d");
-      liveChart = new Chart(ctx,{
-        type:item.type,
-        data:item.chartData,
-        options:{
-          animation:{duration:1000},
-          plugins:{legend:{labels:{font:{family:'Playfair Display'}}}},
-          scales:{x:{ticks:{font:{family:'Playfair Display'}}}, y:{ticks:{font:{family:'Playfair Display'}}}}
-        }
-      });
+      liveChart = new Chart(ctx,{type:item.type,data:item.chartData});
     });
 
     await updateLivePrices();
-    setInterval(updateLivePrices,5000);
-
+    setInterval(updateLivePrices,10000);
   } else if(tabName==="reports"){
     tabsData.reports.forEach(item=>{
       const card=document.createElement("div");
@@ -232,33 +294,36 @@ async function loadTab(tabName, url){
       card.innerHTML=`<h3>${item.title}</h3><canvas></canvas>`;
       container.appendChild(card);
       const ctx = card.querySelector("canvas").getContext("2d");
-      new Chart(ctx,{
-        type:item.type,
-        data:item.chartData,
-        options:{
-          animation:{duration:1000},
-          plugins:{legend:{labels:{font:{family:'Playfair Display'}}}},
-          scales:{x:{ticks:{font:{family:'Playfair Display'}}}, y:{ticks:{font:{family:'Playfair Display'}}}}
-        }
+      new Chart(ctx,{type:item.type,data:item.chartData});
+    });
+  } else if(tabName==="about"){
+    const aboutCard = document.createElement("div");
+    aboutCard.className="card about-container";
+    aboutCard.innerHTML=document.querySelector('#about-template').innerHTML;
+    container.appendChild(aboutCard);
+
+    // Smooth scroll for sidebar
+    const links = aboutCard.querySelectorAll(".about-sidebar a");
+    links.forEach(link=>{
+      link.addEventListener("click",()=>{
+        const target = aboutCard.querySelector(`#${link.dataset.target}`);
+        if(target) target.scrollIntoView({behavior:"smooth",block:"start"});
       });
     });
-  } else if(tabName==="external"){
-    window.open(url,"_blank");
   }
 }
 
-// --- TAB EVENTS ---
+// TAB EVENTS
 const tabEls = document.querySelectorAll(".tab");
 tabEls.forEach(tab=>{
   tab.addEventListener("click",async ()=>{
+    if(tab.classList.contains("external")){
+      window.open(tab.dataset.url,"_blank");
+      return;
+    }
     tabEls.forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
-
-    if(tab.classList.contains("external")){
-      await loadTab("external", tab.dataset.url);
-    } else {
-      await loadTab(tab.dataset.tab);
-    }
+    await loadTab(tab.dataset.tab);
   });
 });
 
