@@ -4,8 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>GRIGORIADIS GRUPPE – Wealth Dashboard</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 :root {
@@ -34,7 +36,8 @@ canvas{width:100%; height:200px;}
 .logo-text{margin-top:15px; letter-spacing:3px; font-size:14px; color:var(--primary); opacity:0; animation:fadeIn 1.5s ease forwards;}
 .contact-button{position:fixed; bottom:20px; right:20px; padding:15px 30px; background:var(--primary); color:white;font-weight:600; text-decoration:none; border-radius:12px; transition:0.3s; z-index:999;}
 .contact-button:hover{background:var(--primary-hover); transform:translateY(-3px); box-shadow:0 5px 15px rgba(0,0,0,0.2);}
-#scopeContainer{padding:40px; max-width:1000px; margin:20px auto; border-radius:20px; background:white;}
+#scopeContainer{padding:40px; max-width:1000px; margin:20px auto; border-radius:20px; background:white; display:none;}
+#downloadPDF{margin-top:20px;padding:10px 20px;background:#8B6F47;color:white;border:none;border-radius:8px;cursor:pointer;}
 @keyframes fadeIn { to { opacity:1; transform:translateY(0); } }
 @media(max-width:768px){ .dashboard{grid-template-columns:1fr;} }
 </style>
@@ -56,20 +59,21 @@ canvas{width:100%; height:200px;}
 <div id="dashboardContainer" class="dashboard"></div>
 
 <!-- Scope Section -->
-<div id="scopeContainer" class="card" style="display:none;">
+<div id="scopeContainer" class="card">
 <h3>Scope</h3>
 <p>GRIGORIADIS GRUPPE is a private Family Wealth Management for its members. No fees are issued for the service for any members. Our scope is to invest your funds in assets to grow them further with low-risk solutions. The monthly withdrawal funds is set based on how many members are using the service.</p>
 </div>
 
-<!-- Footer with 3D Logo -->
+<!-- Footer with 3D Logo and PDF Button -->
 <div class="footer">
     <div class="logo-wrapper" id="logoWrapper">
         <canvas id="particles"></canvas>
         <div class="logo-card">
-            <img src="logo.png" class="logo">
+            <img src="NewBulletinLogo-removebg-preview.png" class="logo">
             <div class="logo-text">Investing in Talent.</div>
         </div>
     </div>
+    <button id="downloadPDF">Download PDF</button>
 </div>
 
 <!-- Contact Button -->
@@ -100,7 +104,7 @@ tabEls.forEach(tab=>{
   });
 });
 
-// Stock data last week
+// Last week stock data
 const lastWeekData = {
   "JPM": 145.2,
   "MSFT": 298.5,
@@ -109,16 +113,16 @@ const lastWeekData = {
   "0857.HK": 5.7
 };
 
-// Dashboard Charts
+// Load Dashboard Charts
 function loadDashboard(){
   dashboardContainer.innerHTML="";
   const labels = Object.keys(lastWeekData);
   const prices = Object.values(lastWeekData);
 
-  // Last Week Stock Prices Bar
+  // Last Week Stock Prices
   const card1 = document.createElement("div");
   card1.className="card";
-  card1.innerHTML=`<h3>Last Week Stock Prices</h3><canvas id="weekChart"></canvas>`;
+  card1.innerHTML=`<h3>Last Week Stock Prices</h3><canvas></canvas>`;
   dashboardContainer.appendChild(card1);
   new Chart(card1.querySelector("canvas").getContext("2d"),{
     type:"bar",
@@ -126,7 +130,7 @@ function loadDashboard(){
     options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false}}}
   });
 
-  // Revenue Bar Chart
+  // Revenue Chart
   const revenueCard=document.createElement("div");
   revenueCard.className="card";
   revenueCard.innerHTML=`<h3>Revenue Chart</h3><canvas></canvas>`;
@@ -137,7 +141,7 @@ function loadDashboard(){
           datasets:[{label:"Revenue (B USD)",data:[120,190,55,80,65],backgroundColor:"#8B6F47"}]}
   });
 
-  // Profit Line Chart
+  // Profit Line
   const profitCard=document.createElement("div");
   profitCard.className="card";
   profitCard.innerHTML=`<h3>Profit Line</h3><canvas></canvas>`;
@@ -160,7 +164,7 @@ function loadDashboard(){
   });
 }
 
-// Initialize
+// Initialize Dashboard
 loadDashboard();
 
 // 3D Logo Particles
@@ -181,6 +185,28 @@ function animateParticles(){ctx.clearRect(0,0,canvas.width,canvas.height); ctx.f
 particles.forEach(p=>{p.y-=p.speedY; if(p.y<0)p.y=canvas.height; ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill();});
 requestAnimationFrame(animateParticles);}
 animateParticles();
+
+// PDF Download
+document.getElementById("downloadPDF").addEventListener("click",()=>{
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'pt', 'a4');
+    const logo = new Image();
+    logo.src = "NewBulletinLogo-removebg-preview.png";
+    logo.onload = () => {
+        doc.addImage(logo, 'PNG', 40, 20, 100, 40);
+        doc.setFontSize(12);
+        doc.text("Scope", 40, 80);
+        const scopeText = "GRIGORIADIS GRUPPE is a private Family Wealth Management for its members. No fees are issued for the service for any members. Our scope is to invest your funds in assets to grow them further with low-risk solutions. The monthly withdrawal funds is set based on how many members are using the service.";
+        doc.text(scopeText, 40, 100, {maxWidth:500});
+        let yOffset = 180;
+        dashboardContainer.querySelectorAll("canvas").forEach(canvas=>{
+            const imgData = canvas.toDataURL("image/png");
+            doc.addImage(imgData, 'PNG', 40, yOffset, 500, 200);
+            yOffset += 220;
+        });
+        doc.save("GRIGORIADIS_GRUPPE_Report.pdf");
+    };
+});
 </script>
 
 </body>
