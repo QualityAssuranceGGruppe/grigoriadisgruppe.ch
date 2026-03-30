@@ -21,7 +21,7 @@ body.dark { --bg:#0f1115; --text:#eaeaea; --card:rgba(255,255,255,0.05); }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);transition:0.3s;}
 
-/* TAB HEADER */
+/* TABS */
 .tabs {
   display:flex;
   justify-content:center;
@@ -29,7 +29,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);trans
   border-radius:12px;
   margin:20px auto;
   overflow:hidden;
-  max-width:1000px;
+  max-width:900px;
+  flex-wrap:wrap;
 }
 .tab {
   flex:1;
@@ -39,6 +40,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);trans
   font-weight:600;
   border-bottom:3px solid transparent;
   transition:0.3s;
+  min-width:120px;
 }
 .tab:hover{ background:rgba(0,0,0,0.05); }
 .tab.active{
@@ -59,28 +61,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);trans
 .card:hover{ transform: translateY(-8px); }
 canvas{ width:100%; height:200px; border:none; }
 
-/* IFRAME + SPINNER */
-#iframeContainer{
-    max-width:1000px;
-    margin:20px auto;
-    border-radius:20px;
-    overflow:hidden;
-    height:70vh;
-    border:1px solid rgba(0,0,0,0.1);
-    position:relative;
-    background:white;
-}
-#iframeContainer iframe{ width:100%; height:100%; border:none; }
-#iframeContainer .spinner{
-    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-    border:6px solid #f3f3f3;
-    border-top:6px solid var(--primary);
-    border-radius:50%;
-    width:50px; height:50px;
-    animation:spin 1s linear infinite;
-    z-index:10;
-}
-@keyframes spin{ 0%{transform:translate(-50%,-50%) rotate(0deg);} 100%{transform:translate(-50%,-50%) rotate(360deg);} }
+/* IFRAME BROWSER */
+#iframeContainer{width:100%; height:600px; border:none; display:none; margin-top:20px; border-radius:12px; overflow:hidden;}
 
 /* FOOTER */
 .footer{display:flex;justify-content:center;padding:80px 20px;flex-direction:column;align-items:center;position:relative;}
@@ -98,6 +80,12 @@ canvas{ width:100%; height:200px; border:none; }
 }
 .contact-button:hover{ background:var(--primary-hover); transform:translateY(-3px); box-shadow:0 5px 15px rgba(0,0,0,0.2); }
 
+/* RESPONSIVE */
+@media (max-width: 768px){
+  .dashboard{display:flex; flex-direction:column; gap:20px; padding:20px;}
+  #iframeContainer{height:50vh;}
+}
+
 @keyframes fadeIn { to { opacity:1; transform:translateY(0); } }
 </style>
 </head>
@@ -114,13 +102,8 @@ canvas{ width:100%; height:200px; border:none; }
 </div>
 
 <div class="title"><h1>Managing Assets</h1></div>
-
-<div id="dashboardContainer" class="dashboard"></div>
-
-<div id="iframeContainer" class="card">
-    <div class="spinner" id="iframeSpinner"></div>
-    <iframe id="embeddedFrame" src="" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
-</div>
+<div class="dashboard" id="dashboardContainer"></div>
+<iframe id="iframeContainer"></iframe>
 
 <div class="footer">
     <div class="logo-wrapper" id="logoWrapper">
@@ -136,9 +119,6 @@ canvas{ width:100%; height:200px; border:none; }
 <a href="mailto:quality@grigoriadisgruppe.ch" class="contact-button">Contact Us</a>
 
 <script>
-// DARK MODE
-function toggleDark(){document.body.classList.toggle("dark");}
-
 // --- 3D LOGO TILT ---
 const wrapper=document.getElementById("logoWrapper");
 wrapper.addEventListener("mousemove",e=>{
@@ -200,12 +180,12 @@ const tabsData = {
   ]
 };
 
-// --- FETCH PRICES ---
+// --- FETCH LIVE PRICES ---
 async function fetchPrice(symbol){
   try{
-    const res = await fetch(`https://financialmodelingprep.com/api/v3/quote-short/${symbol}?apikey=demo`);
+    const res = await fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbol}`);
     const data = await res.json();
-    return data[0]?.price || 0;
+    return data.quoteResponse.result[0]?.regularMarketPrice || 0;
   } catch(e){ return 0; }
 }
 
@@ -226,10 +206,10 @@ async function updateLivePrices(){
 }
 
 // --- LOAD TAB ---
-async function loadTab(tabName){
+async function loadTab(tabName, url){
+  document.getElementById("iframeContainer").style.display="none";
+  container.style.display="grid";
   container.innerHTML="";
-  document.getElementById("embeddedFrame").src = ""; // clear iframe
-
   if(tabName==="dashboard"){
     const liveDiv=document.createElement("div");
     liveDiv.id="livePrices";
@@ -247,6 +227,7 @@ async function loadTab(tabName){
 
     await updateLivePrices();
     setInterval(updateLivePrices,10000);
+
   } else if(tabName==="reports"){
     tabsData.reports.forEach(item=>{
       const card=document.createElement("div");
@@ -256,28 +237,26 @@ async function loadTab(tabName){
       const ctx = card.querySelector("canvas").getContext("2d");
       new Chart(ctx,{type:item.type,data:item.chartData});
     });
+  } else if(tabName==="external"){
+    container.style.display="none";
+    const iframe = document.getElementById("iframeContainer");
+    iframe.src = url;
+    iframe.style.display="block";
   }
 }
 
 // --- TAB EVENTS ---
 const tabEls = document.querySelectorAll(".tab");
-const iframe = document.getElementById("embeddedFrame");
-const spinner = document.getElementById("iframeSpinner");
-
 tabEls.forEach(tab=>{
   tab.addEventListener("click",async ()=>{
-    if(tab.classList.contains("external")){
-        // Show spinner
-        spinner.style.display = "block";
-        iframe.src = tab.dataset.url;
-        iframe.onload = () => spinner.style.display = "none";
-        tabEls.forEach(t=>t.classList.remove("active"));
-        tab.classList.add("active");
-        return;
-    }
     tabEls.forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
-    await loadTab(tab.dataset.tab);
+
+    if(tab.classList.contains("external")){
+      await loadTab("external", tab.dataset.url);
+    } else {
+      await loadTab(tab.dataset.tab);
+    }
   });
 });
 
