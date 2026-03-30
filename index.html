@@ -1,57 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GRIGORIADIS GRUPPE</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GRIGORIADIS GRUPPE – Live Stocks</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root {
-    --bg: #f5f5f5;
-    --text: #222;
-    --card: rgba(255,255,255,0.7);
+    --bg:#f5f5f5;
+    --text:#222;
+    --card:rgba(255,255,255,0.7);
+    --primary:#8B6F47;
+    --primary-hover:#A08353;
 }
-body.dark { --bg: #0f1115; --text: #eaeaea; --card: rgba(255,255,255,0.05); }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); transition:0.3s; }
+body.dark { --bg:#0f1115; --text:#eaeaea; --card:rgba(255,255,255,0.05); }
 
-.header { display:flex; justify-content:space-between; align-items:center; padding:25px 40px; }
-.buttons-container { display:flex; gap:15px; }
-.text-button {
-    padding: 15px 25px; border-radius:12px; background: var(--card); color: var(--text);
-    font-weight:600; text-decoration:none; transition:0.3s; border:2px solid transparent; cursor:pointer;
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);transition:0.3s;}
+
+/* TAB HEADER */
+.tabs {
+  display:flex;
+  justify-content:center;
+  background:var(--card);
+  border-radius:12px;
+  margin:20px auto;
+  overflow:hidden;
+  max-width:1000px;
 }
-.text-button:hover, .text-button.active {
-    background:#8B6F47; color:white; border-color:#ffffff50; transform: translateY(-3px); box-shadow:0 5px 15px rgba(0,0,0,0.2);
+.tab {
+  flex:1;
+  text-align:center;
+  padding:15px 20px;
+  cursor:pointer;
+  font-weight:600;
+  border-bottom:3px solid transparent;
+  transition:0.3s;
 }
-.toggle { cursor:pointer; padding:10px 15px; border-radius:10px; background:#8B6F47; color:white; }
+.tab:hover{ background:rgba(0,0,0,0.05); }
+.tab.active{
+  border-bottom:3px solid var(--primary);
+  background:var(--primary);
+  color:white;
+}
 
-.title { text-align:center; margin-top:20px; }
-.title h1 { font-family:'Playfair Display', serif; font-size:42px; color:#8B6F47; }
+/* TITLE */
+.title{text-align:center;margin-top:20px;}
+.title h1{font-family:'Playfair Display', serif; font-size:42px; color:var(--primary);}
 
-.dashboard {
+/* DASHBOARD */
+.dashboard{
     display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:25px; padding:40px;
 }
-.card { padding:20px; border-radius:20px; background:var(--card); backdrop-filter: blur(12px); transition:0.3s; }
-.card:hover { transform: translateY(-8px); }
-iframe, canvas { width:100%; height:200px; border:none; }
+.card{ padding:20px; border-radius:20px; background:var(--card); backdrop-filter: blur(12px); transition:0.3s; }
+.card:hover{ transform: translateY(-8px); }
+canvas{ width:100%; height:200px; border:none; }
 
-.footer { display:flex; justify-content:center; padding:80px 20px; flex-direction:column; align-items:center; position:relative; }
-.logo-wrapper { position: relative; perspective:1000px; }
-#particles { position:absolute; top:0; left:0; width:100%; height:100%; }
-.logo-card { position: relative; padding:30px 50px; border-radius:25px; background:rgba(255,255,255,0.06); backdrop-filter:blur(20px); text-align:center; }
-.logo { width:180px; opacity:0; transform:translateY(20px); animation:fadeIn 1.2s ease forwards; }
-.logo-text { margin-top:15px; letter-spacing:3px; font-size:14px; color:#8B6F47; opacity:0; animation:fadeIn 1.5s ease forwards; }
-.ticker { margin-top:10px; font-size:13px; opacity:0; animation:fadeIn 2s ease forwards; }
+/* IFRAME + SPINNER */
+#iframeContainer{
+    max-width:1000px;
+    margin:20px auto;
+    border-radius:20px;
+    overflow:hidden;
+    height:70vh;
+    border:1px solid rgba(0,0,0,0.1);
+    position:relative;
+    background:white;
+}
+#iframeContainer iframe{ width:100%; height:100%; border:none; }
+#iframeContainer .spinner{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    border:6px solid #f3f3f3;
+    border-top:6px solid var(--primary);
+    border-radius:50%;
+    width:50px; height:50px;
+    animation:spin 1s linear infinite;
+    z-index:10;
+}
+@keyframes spin{ 0%{transform:translate(-50%,-50%) rotate(0deg);} 100%{transform:translate(-50%,-50%) rotate(360deg);} }
 
-.contact-button {
-    position:fixed; bottom:20px; right:20px; padding:15px 30px; background:#8B6F47; color:white;
+/* FOOTER */
+.footer{display:flex;justify-content:center;padding:80px 20px;flex-direction:column;align-items:center;position:relative;}
+.logo-wrapper{position: relative; perspective:1000px;}
+#particles{position:absolute;top:0;left:0;width:100%;height:100%;}
+.logo-card{position: relative; padding:30px 50px; border-radius:25px; background:rgba(255,255,255,0.06); backdrop-filter:blur(20px); text-align:center;}
+.logo{width:180px; opacity:0; transform:translateY(20px); animation:fadeIn 1.2s ease forwards;}
+.logo-text{margin-top:15px; letter-spacing:3px; font-size:14px; color:var(--primary); opacity:0; animation:fadeIn 1.5s ease forwards;}
+.ticker{margin-top:10px; font-size:13px; opacity:0; animation:fadeIn 2s ease forwards;}
+
+/* CONTACT BUTTON */
+.contact-button{
+    position:fixed; bottom:20px; right:20px; padding:15px 30px; background:var(--primary); color:white;
     font-weight:600; text-decoration:none; border-radius:12px; transition:0.3s; z-index:999;
 }
-.contact-button:hover { background:#a08353; transform:translateY(-3px); box-shadow:0 5px 15px rgba(0,0,0,0.2); }
+.contact-button:hover{ background:var(--primary-hover); transform:translateY(-3px); box-shadow:0 5px 15px rgba(0,0,0,0.2); }
 
 @keyframes fadeIn { to { opacity:1; transform:translateY(0); } }
 </style>
@@ -59,18 +104,23 @@ iframe, canvas { width:100%; height:200px; border:none; }
 
 <body>
 
-<div class="header">
-    <div class="buttons-container">
-        <a href="#" class="text-button" data-tab="dashboard">Dashboard</a>
-        <a href="#" class="text-button" data-tab="reports">Reports</a>
-        <a href="https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1" class="text-button external">Mail</a>
-        <a href="https://grigoriadisdionysios.de6.quickconnect.to/#/signin" class="text-button external">Server</a>
-    </div>
-    <div class="toggle" onclick="toggleDark()">Toggle Mode</div>
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" data-tab="dashboard">Dashboard</div>
+  <div class="tab" data-tab="reports">Reports</div>
+  <div class="tab external" data-url="https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1">Mail</div>
+  <div class="tab external" data-url="https://grigoriadisdionysios.de6.quickconnect.to/#/signin">Server</div>
+  <div class="tab external" data-url="https://www.etoro.com">Portfolio</div>
 </div>
 
 <div class="title"><h1>Managing Assets</h1></div>
-<div class="dashboard" id="dashboardContainer"></div>
+
+<div id="dashboardContainer" class="dashboard"></div>
+
+<div id="iframeContainer" class="card">
+    <div class="spinner" id="iframeSpinner"></div>
+    <iframe id="embeddedFrame" src="" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+</div>
 
 <div class="footer">
     <div class="logo-wrapper" id="logoWrapper">
@@ -89,7 +139,7 @@ iframe, canvas { width:100%; height:200px; border:none; }
 // DARK MODE
 function toggleDark(){document.body.classList.toggle("dark");}
 
-// 3D LOGO TILT
+// --- 3D LOGO TILT ---
 const wrapper=document.getElementById("logoWrapper");
 wrapper.addEventListener("mousemove",e=>{
     const rect=wrapper.getBoundingClientRect();
@@ -99,7 +149,7 @@ wrapper.addEventListener("mousemove",e=>{
 });
 wrapper.addEventListener("mouseleave",()=>{wrapper.querySelector(".logo-card").style.transform="rotateX(0) rotateY(0)";});
 
-// PARTICLES
+// --- PARTICLES ---
 const canvas=document.getElementById("particles"), ctx=canvas.getContext("2d");
 canvas.width=canvas.offsetWidth; canvas.height=canvas.offsetHeight;
 let particles=[]; for(let i=0;i<40;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,size:Math.random()*2,speedY:Math.random()*0.5+0.2});}
@@ -108,59 +158,131 @@ particles.forEach(p=>{p.y-=p.speedY; if(p.y<0)p.y=canvas.height; ctx.beginPath()
 requestAnimationFrame(animateParticles);}
 animateParticles();
 
-// TICKER
+// --- TICKER ---
 const ticker=document.getElementById("ticker"); let value=128.45;
 function updateTicker(){const change=(Math.random()-0.5)*2; value+=change; ticker.innerText="Brand Value Index: "+value.toFixed(2)+(change>=0?" ▲":" ▼"); ticker.style.color=change>=0?"#4caf50":"#e53935";}
 setInterval(updateTicker,2000); updateTicker();
 
-// STOCKS
-const stocks=[{symbol:"JPM",title:"JP Morgan"},{symbol:"MSFT",title:"Microsoft"},{symbol:"GS",title:"Goldman Sachs"},{symbol:"RHM.DE",title:"Rheinmetall"},{symbol:"0857.HK",title:"PetroChina"}];
-
-// TABS
-const tabs={dashboard:[], reports:[
-    {title:"Revenue Chart", content:"<canvas></canvas>", type:"bar", chartData:{labels:["JP Morgan","Microsoft","Goldman Sachs","Rheinmetall","PetroChina"], datasets:[{label:"Revenue (B USD)",data:[120,190,55,80,65],backgroundColor:"#8B6F47"}]}},
-    {title:"Profit Line", content:"<canvas></canvas>", type:"line", chartData:{labels:["Q1","Q2","Q3","Q4"], datasets:[{label:"Profit (B USD)",data:[35,40,45,61],borderColor:"#C6A96B", fill:false}]}},
-    {title:"Market Share Pie", content:"<canvas></canvas>", type:"pie", chartData:{labels:["JP Morgan","Microsoft","Goldman Sachs","Rheinmetall","PetroChina"], datasets:[{label:"Market Share %", data:[25,30,15,10,20], backgroundColor:["#8B6F47","#C6A96B","#D4B35B","#E3C88D","#A67C52"]}]}}
-]};
-const dashboardContainer=document.getElementById("dashboardContainer");
-const tabButtons=document.querySelectorAll(".text-button[data-tab]");
-
-// LOAD DASHBOARD
+// --- STOCKS ---
+const stockList = [
+  { symbol:"JPM", title:"JP Morgan" },
+  { symbol:"MSFT", title:"Microsoft" },
+  { symbol:"GS", title:"Goldman Sachs" },
+  { symbol:"RHM.DE", title:"Rheinmetall" },
+  { symbol:"0857.HK", title:"PetroChina" }
+];
+let stockPrices = {};
 let liveChart;
-function loadDashboard(){
-    dashboardContainer.innerHTML="";
-    const cardEl=document.createElement("div"); cardEl.classList.add("card");
-    cardEl.innerHTML="<h3>Live Stock Prices</h3><canvas></canvas>";
-    dashboardContainer.appendChild(cardEl);
-    const ctx=cardEl.querySelector("canvas").getContext("2d");
-    const labels=stocks.map(s=>s.title); const data=stocks.map(()=>Math.random()*500);
-    liveChart=new Chart(ctx,{type:'line', data:{labels, datasets:[{label:"Price (USD)", data, borderColor:"#C6A96B", fill:false}]}, options:{responsive:true, plugins:{legend:{display:true}}}});
-    setInterval(()=>{ liveChart.data.datasets[0].data=stocks.map(()=> (Math.random()*500).toFixed(2)); liveChart.update(); },3000);
+
+// --- TABS DATA ---
+const container = document.getElementById("dashboardContainer");
+const tabsData = {
+  dashboard: [
+    { title:"Live Stock Prices", id:"livePrices" },
+    { title:"Live Chart", type:"line", chartData:{
+      labels: stockList.map(s=>s.title),
+      datasets:[{label:"Price USD", data: stockList.map(()=>0), borderColor:"#8B6F47", fill:false}]
+    }}
+  ],
+  reports: [
+    { title:"Revenue Chart", type:"bar", chartData:{
+      labels:["JP Morgan","Microsoft","Goldman Sachs","Rheinmetall","PetroChina"],
+      datasets:[{label:"Revenue (B USD)",data:[120,190,55,80,65],backgroundColor:"#8B6F47"}]
+    }},
+    { title:"Profit Line", type:"line", chartData:{
+      labels:["Q1","Q2","Q3","Q4"],
+      datasets:[{label:"Profit (B USD)",data:[35,40,45,61],borderColor:"#C6A96B",fill:false}]
+    }},
+    { title:"Market Share Pie", type:"pie", chartData:{
+      labels:["JP Morgan","Microsoft","Goldman Sachs","Rheinmetall","PetroChina"],
+      datasets:[{label:"Market Share %", data:[25,30,15,10,20], backgroundColor:["#8B6F47","#C6A96B","#D4B35B","#E3C88D","#A67C52"]}]
+    }}
+  ]
+};
+
+// --- FETCH PRICES ---
+async function fetchPrice(symbol){
+  try{
+    const res = await fetch(`https://financialmodelingprep.com/api/v3/quote-short/${symbol}?apikey=demo`);
+    const data = await res.json();
+    return data[0]?.price || 0;
+  } catch(e){ return 0; }
 }
 
-// LOAD REPORTS
-function loadReports(){dashboardContainer.innerHTML=""; tabs.reports.forEach(card=>{
-    const cardEl=document.createElement("div"); cardEl.classList.add("card"); cardEl.innerHTML=`<h3>${card.title}</h3>${card.content}`;
-    dashboardContainer.appendChild(cardEl);
-    if(card.type){ const ctx=cardEl.querySelector("canvas").getContext("2d"); new Chart(ctx,{type:card.type, data:card.chartData, options:{responsive:true, plugins:{legend:{display:true}}}});}
-});}
-
-// ACTIVE TAB
-function setActiveTabButton(activeBtn){ tabButtons.forEach(btn=>btn.classList.remove("active")); if(activeBtn) activeBtn.classList.add("active");}
-
-// LOAD TAB
-function loadTab(tabName){
-    if(tabName==="dashboard") loadDashboard();
-    else if(tabName==="reports") loadReports();
-    const activeBtn=document.querySelector(`.text-button[data-tab="${tabName}"]`);
-    setActiveTabButton(activeBtn);
+// --- UPDATE LIVE ---
+async function updateLivePrices(){
+  const liveDiv = document.getElementById("livePrices");
+  if(!liveDiv) return;
+  liveDiv.innerHTML="";
+  for(const s of stockList){
+    const price = await fetchPrice(s.symbol);
+    stockPrices[s.symbol]=price;
+    liveDiv.innerHTML+=`<div>${s.title}: $${price.toFixed(2)}</div>`;
+  }
+  if(liveChart){
+    liveChart.data.datasets[0].data = stockList.map(s=>stockPrices[s.symbol]||0);
+    liveChart.update();
+  }
 }
+
+// --- LOAD TAB ---
+async function loadTab(tabName){
+  container.innerHTML="";
+  document.getElementById("embeddedFrame").src = ""; // clear iframe
+
+  if(tabName==="dashboard"){
+    const liveDiv=document.createElement("div");
+    liveDiv.id="livePrices";
+    liveDiv.className="card";
+    container.appendChild(liveDiv);
+
+    tabsData.dashboard.slice(1).forEach(item=>{
+      const card=document.createElement("div");
+      card.className="card";
+      card.innerHTML=`<h3>${item.title}</h3><canvas></canvas>`;
+      container.appendChild(card);
+      const ctx = card.querySelector("canvas").getContext("2d");
+      liveChart = new Chart(ctx,{type:item.type,data:item.chartData});
+    });
+
+    await updateLivePrices();
+    setInterval(updateLivePrices,10000);
+  } else if(tabName==="reports"){
+    tabsData.reports.forEach(item=>{
+      const card=document.createElement("div");
+      card.className="card";
+      card.innerHTML=`<h3>${item.title}</h3><canvas></canvas>`;
+      container.appendChild(card);
+      const ctx = card.querySelector("canvas").getContext("2d");
+      new Chart(ctx,{type:item.type,data:item.chartData});
+    });
+  }
+}
+
+// --- TAB EVENTS ---
+const tabEls = document.querySelectorAll(".tab");
+const iframe = document.getElementById("embeddedFrame");
+const spinner = document.getElementById("iframeSpinner");
+
+tabEls.forEach(tab=>{
+  tab.addEventListener("click",async ()=>{
+    if(tab.classList.contains("external")){
+        // Show spinner
+        spinner.style.display = "block";
+        iframe.src = tab.dataset.url;
+        iframe.onload = () => spinner.style.display = "none";
+        tabEls.forEach(t=>t.classList.remove("active"));
+        tab.classList.add("active");
+        return;
+    }
+    tabEls.forEach(t=>t.classList.remove("active"));
+    tab.classList.add("active");
+    await loadTab(tab.dataset.tab);
+  });
+});
 
 // INIT
 loadTab("dashboard");
-tabButtons.forEach(btn=>{ btn.addEventListener("click", e=>{ e.preventDefault(); loadTab(btn.dataset.tab); }); });
-document.querySelectorAll(".text-button.external").forEach(btn=>{ btn.addEventListener("click", e=>{ window.open(btn.href,"_blank"); }); });
-
 </script>
 </body>
 </html>
