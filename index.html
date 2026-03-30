@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>GRIGORIADIS GRUPPE – Live Stocks</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -15,11 +15,17 @@
     --card:rgba(255,255,255,0.7);
     --primary:#8B6F47;
     --primary-hover:#A08353;
+    --link-color:#888888;
 }
 body.dark { --bg:#0f1115; --text:#eaeaea; --card:rgba(255,255,255,0.05); }
 
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);transition:0.3s;}
+body{
+    font-family:'Playfair Display', serif;
+    background:var(--bg);
+    color:var(--text);
+    transition:0.3s;
+}
 
 /* TABS */
 .tabs {
@@ -31,6 +37,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);trans
   overflow:hidden;
   max-width:900px;
   flex-wrap:wrap;
+  font-family:'Playfair Display', serif;
 }
 .tab {
   flex:1;
@@ -41,6 +48,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);trans
   border-bottom:3px solid transparent;
   transition:0.3s;
   min-width:120px;
+  font-family:'Playfair Display', serif;
 }
 .tab:hover{ background:rgba(0,0,0,0.05); }
 .tab.active{
@@ -48,42 +56,42 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);trans
   background:var(--primary);
   color:white;
 }
+.tab .link-text {
+  font-size:0.7em;
+  color:var(--link-color);
+  margin-left:5px;
+  font-family:'Playfair Display', serif;
+}
 
 /* TITLE */
 .title{text-align:center;margin-top:20px;}
-.title h1{font-family:'Playfair Display', serif; font-size:42px; color:var(--primary);}
+.title h1{font-size:42px; color:var(--primary);}
 
 /* DASHBOARD */
 .dashboard{
     display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:25px; padding:40px;
 }
-.card{ padding:20px; border-radius:20px; background:var(--card); backdrop-filter: blur(12px); transition:0.3s; }
+.card{ padding:20px; border-radius:20px; background:var(--card); backdrop-filter: blur(12px); transition:0.3s; font-family:'Playfair Display', serif; }
 .card:hover{ transform: translateY(-8px); }
-canvas{ width:100%; height:200px; border:none; }
-
-/* IFRAME BROWSER */
-#iframeContainer{width:100%; height:600px; border:none; display:none; margin-top:20px; border-radius:12px; overflow:hidden;}
+canvas{ width:100%; height:200px; border:none; font-family:'Playfair Display', serif; }
 
 /* FOOTER */
-.footer{display:flex;justify-content:center;padding:80px 20px;flex-direction:column;align-items:center;position:relative;}
+.footer{display:flex;justify-content:center;padding:60px 20px;flex-direction:column;align-items:center;position:relative;}
 .logo-wrapper{position: relative; perspective:1000px;}
-#particles{position:absolute;top:0;left:0;width:100%;height:100%;}
 .logo-card{position: relative; padding:30px 50px; border-radius:25px; background:rgba(255,255,255,0.06); backdrop-filter:blur(20px); text-align:center;}
 .logo{width:180px; opacity:0; transform:translateY(20px); animation:fadeIn 1.2s ease forwards;}
 .logo-text{margin-top:15px; letter-spacing:3px; font-size:14px; color:var(--primary); opacity:0; animation:fadeIn 1.5s ease forwards;}
-.ticker{margin-top:10px; font-size:13px; opacity:0; animation:fadeIn 2s ease forwards;}
 
 /* CONTACT BUTTON */
 .contact-button{
     position:fixed; bottom:20px; right:20px; padding:15px 30px; background:var(--primary); color:white;
-    font-weight:600; text-decoration:none; border-radius:12px; transition:0.3s; z-index:999;
+    font-weight:600; text-decoration:none; border-radius:12px; transition:0.3s; z-index:999; font-family:'Playfair Display', serif;
 }
 .contact-button:hover{ background:var(--primary-hover); transform:translateY(-3px); box-shadow:0 5px 15px rgba(0,0,0,0.2); }
 
 /* RESPONSIVE */
 @media (max-width: 768px){
   .dashboard{display:flex; flex-direction:column; gap:20px; padding:20px;}
-  #iframeContainer{height:50vh;}
 }
 
 @keyframes fadeIn { to { opacity:1; transform:translateY(0); } }
@@ -96,22 +104,19 @@ canvas{ width:100%; height:200px; border:none; }
 <div class="tabs">
   <div class="tab active" data-tab="dashboard">Dashboard</div>
   <div class="tab" data-tab="reports">Reports</div>
-  <div class="tab external" data-url="https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1">Mail</div>
-  <div class="tab external" data-url="https://grigoriadisdionysios.de6.quickconnect.to/#/signin">Server</div>
-  <div class="tab external" data-url="https://www.etoro.com">Portfolio</div>
+  <div class="tab external" data-url="https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1">Mail <span class="link-text">(link)</span></div>
+  <div class="tab external" data-url="https://grigoriadisdionysios.de6.quickconnect.to/#/signin">Server <span class="link-text">(link)</span></div>
+  <div class="tab external" data-url="https://www.etoro.com">Portfolio <span class="link-text">(link)</span></div>
 </div>
 
 <div class="title"><h1>Managing Assets</h1></div>
 <div class="dashboard" id="dashboardContainer"></div>
-<iframe id="iframeContainer"></iframe>
 
 <div class="footer">
     <div class="logo-wrapper" id="logoWrapper">
-        <canvas id="particles"></canvas>
         <div class="logo-card">
             <img src="NewBulletinLogo-removebg-preview.png" class="logo">
             <div class="logo-text">Investing in Talent.</div>
-            <div class="ticker" id="ticker">Loading value...</div>
         </div>
     </div>
 </div>
@@ -128,20 +133,6 @@ wrapper.addEventListener("mousemove",e=>{
     wrapper.querySelector(".logo-card").style.transform=`rotateX(${-rotateX*10}deg) rotateY(${rotateY*10}deg)`;
 });
 wrapper.addEventListener("mouseleave",()=>{wrapper.querySelector(".logo-card").style.transform="rotateX(0) rotateY(0)";});
-
-// --- PARTICLES ---
-const canvas=document.getElementById("particles"), ctx=canvas.getContext("2d");
-canvas.width=canvas.offsetWidth; canvas.height=canvas.offsetHeight;
-let particles=[]; for(let i=0;i<40;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,size:Math.random()*2,speedY:Math.random()*0.5+0.2});}
-function animateParticles(){ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle="rgba(198,169,107,0.6)";
-particles.forEach(p=>{p.y-=p.speedY; if(p.y<0)p.y=canvas.height; ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill();});
-requestAnimationFrame(animateParticles);}
-animateParticles();
-
-// --- TICKER ---
-const ticker=document.getElementById("ticker"); let value=128.45;
-function updateTicker(){const change=(Math.random()-0.5)*2; value+=change; ticker.innerText="Brand Value Index: "+value.toFixed(2)+(change>=0?" ▲":" ▼"); ticker.style.color=change>=0?"#4caf50":"#e53935";}
-setInterval(updateTicker,2000); updateTicker();
 
 // --- STOCKS ---
 const stockList = [
@@ -161,7 +152,7 @@ const tabsData = {
     { title:"Live Stock Prices", id:"livePrices" },
     { title:"Live Chart", type:"line", chartData:{
       labels: stockList.map(s=>s.title),
-      datasets:[{label:"Price USD", data: stockList.map(()=>0), borderColor:"#8B6F47", fill:false}]
+      datasets:[{label:"Price USD", data: stockList.map(()=>0), borderColor:"#8B6F47", fill:false, tension:0.4}]
     }}
   ],
   reports: [
@@ -171,7 +162,7 @@ const tabsData = {
     }},
     { title:"Profit Line", type:"line", chartData:{
       labels:["Q1","Q2","Q3","Q4"],
-      datasets:[{label:"Profit (B USD)",data:[35,40,45,61],borderColor:"#C6A96B",fill:false}]
+      datasets:[{label:"Profit (B USD)",data:[35,40,45,61],borderColor:"#C6A96B",fill:false, tension:0.4}]
     }},
     { title:"Market Share Pie", type:"pie", chartData:{
       labels:["JP Morgan","Microsoft","Goldman Sachs","Rheinmetall","PetroChina"],
@@ -180,7 +171,7 @@ const tabsData = {
   ]
 };
 
-// --- FETCH LIVE PRICES ---
+// --- FETCH LIVE STOCK PRICES ---
 async function fetchPrice(symbol){
   try{
     const res = await fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbol}`);
@@ -189,7 +180,7 @@ async function fetchPrice(symbol){
   } catch(e){ return 0; }
 }
 
-// --- UPDATE LIVE ---
+// --- UPDATE LIVE STOCKS ---
 async function updateLivePrices(){
   const liveDiv = document.getElementById("livePrices");
   if(!liveDiv) return;
@@ -207,8 +198,6 @@ async function updateLivePrices(){
 
 // --- LOAD TAB ---
 async function loadTab(tabName, url){
-  document.getElementById("iframeContainer").style.display="none";
-  container.style.display="grid";
   container.innerHTML="";
   if(tabName==="dashboard"){
     const liveDiv=document.createElement("div");
@@ -222,11 +211,19 @@ async function loadTab(tabName, url){
       card.innerHTML=`<h3>${item.title}</h3><canvas></canvas>`;
       container.appendChild(card);
       const ctx = card.querySelector("canvas").getContext("2d");
-      liveChart = new Chart(ctx,{type:item.type,data:item.chartData});
+      liveChart = new Chart(ctx,{
+        type:item.type,
+        data:item.chartData,
+        options:{
+          animation:{duration:1000},
+          plugins:{legend:{labels:{font:{family:'Playfair Display'}}}},
+          scales:{x:{ticks:{font:{family:'Playfair Display'}}}, y:{ticks:{font:{family:'Playfair Display'}}}}
+        }
+      });
     });
 
     await updateLivePrices();
-    setInterval(updateLivePrices,10000);
+    setInterval(updateLivePrices,5000);
 
   } else if(tabName==="reports"){
     tabsData.reports.forEach(item=>{
@@ -235,13 +232,18 @@ async function loadTab(tabName, url){
       card.innerHTML=`<h3>${item.title}</h3><canvas></canvas>`;
       container.appendChild(card);
       const ctx = card.querySelector("canvas").getContext("2d");
-      new Chart(ctx,{type:item.type,data:item.chartData});
+      new Chart(ctx,{
+        type:item.type,
+        data:item.chartData,
+        options:{
+          animation:{duration:1000},
+          plugins:{legend:{labels:{font:{family:'Playfair Display'}}}},
+          scales:{x:{ticks:{font:{family:'Playfair Display'}}}, y:{ticks:{font:{family:'Playfair Display'}}}}
+        }
+      });
     });
   } else if(tabName==="external"){
-    container.style.display="none";
-    const iframe = document.getElementById("iframeContainer");
-    iframe.src = url;
-    iframe.style.display="block";
+    window.open(url,"_blank");
   }
 }
 
