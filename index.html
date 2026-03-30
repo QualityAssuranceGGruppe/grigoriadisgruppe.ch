@@ -6,7 +6,6 @@
 <title>GRIGORIADIS GRUPPE – Wealth Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 :root {
@@ -17,10 +16,11 @@
     --primary-hover:#A08353;
 }
 body{margin:0;font-family:'Playfair Display', serif;background:var(--bg);color:var(--text);transition:0.3s;}
-.tabs {display:flex; justify-content:center; background:var(--card); border-radius:12px; margin:20px auto; overflow:hidden; max-width:1000px;}
+.tabs {display:flex; flex-wrap:wrap; justify-content:center; background:var(--card); border-radius:12px; margin:20px auto; overflow:hidden; max-width:1000px;}
 .tab {flex:1; text-align:center; padding:15px 20px; cursor:pointer; font-weight:600; border-bottom:3px solid transparent; transition:0.3s;}
 .tab:hover{background:rgba(0,0,0,0.05);}
 .tab.active{border-bottom:3px solid var(--primary); background:var(--primary); color:white;}
+.link-label{font-size:12px; color:#A08353; margin-left:4px;}
 .title{text-align:center;margin-top:20px;}
 .title h1{font-size:42px;color:var(--primary);}
 .dashboard{display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:25px; padding:40px;}
@@ -28,37 +28,51 @@ body{margin:0;font-family:'Playfair Display', serif;background:var(--bg);color:v
 .card:hover{transform: translateY(-8px);}
 canvas{width:100%; height:200px;}
 .footer{display:flex;justify-content:center;padding:80px 20px;flex-direction:column;align-items:center;position:relative;}
+.logo-wrapper{position: relative; perspective:1000px;}
 .logo-card{position: relative; padding:30px 50px; border-radius:25px; background:rgba(255,255,255,0.06); backdrop-filter:blur(20px); text-align:center;}
-.logo{width:180px;}
-.logo-text{margin-top:15px; letter-spacing:3px; font-size:14px; color:var(--primary);}
+.logo{width:180px; opacity:0; transform:translateY(20px); animation:fadeIn 1.2s ease forwards;}
+.logo-text{margin-top:15px; letter-spacing:3px; font-size:14px; color:var(--primary); opacity:0; animation:fadeIn 1.5s ease forwards;}
 .contact-button{position:fixed; bottom:20px; right:20px; padding:15px 30px; background:var(--primary); color:white;font-weight:600; text-decoration:none; border-radius:12px; transition:0.3s; z-index:999;}
 .contact-button:hover{background:var(--primary-hover); transform:translateY(-3px); box-shadow:0 5px 15px rgba(0,0,0,0.2);}
-#scopeContainer{padding:40px; max-width:1000px; margin:20px auto; border-radius:20px;}
+#scopeContainer{padding:40px; max-width:1000px; margin:20px auto; border-radius:20px; background:white;}
+@keyframes fadeIn { to { opacity:1; transform:translateY(0); } }
+@media(max-width:768px){ .dashboard{grid-template-columns:1fr;} }
 </style>
 </head>
 <body>
 
+<!-- Tabs -->
 <div class="tabs">
   <div class="tab active" data-tab="dashboard">Dashboard</div>
+  <div class="tab external" data-url="mailto:quality@grigoriadisgruppe.ch">Mail <span class="link-label">(link)</span></div>
+  <div class="tab external" data-url="https://grigoriadisdionysios.de6.quickconnect.to/#/signin">Server <span class="link-label">(link)</span></div>
+  <div class="tab external" data-url="https://www.etoro.com">Portfolio <span class="link-label">(link)</span></div>
   <div class="tab" data-tab="scope">Scope</div>
 </div>
 
 <div class="title"><h1>Managing Assets</h1></div>
 
+<!-- Dashboard Container -->
 <div id="dashboardContainer" class="dashboard"></div>
 
-<div id="scopeContainer" class="card" style="background:white;display:none;">
+<!-- Scope Section -->
+<div id="scopeContainer" class="card" style="display:none;">
 <h3>Scope</h3>
 <p>GRIGORIADIS GRUPPE is a private Family Wealth Management for its members. No fees are issued for the service for any members. Our scope is to invest your funds in assets to grow them further with low-risk solutions. The monthly withdrawal funds is set based on how many members are using the service.</p>
 </div>
 
+<!-- Footer with 3D Logo -->
 <div class="footer">
-    <div class="logo-card">
-        <img src="logo.png" class="logo">
-        <div class="logo-text">Investing in Talent.</div>
+    <div class="logo-wrapper" id="logoWrapper">
+        <canvas id="particles"></canvas>
+        <div class="logo-card">
+            <img src="logo.png" class="logo">
+            <div class="logo-text">Investing in Talent.</div>
+        </div>
     </div>
 </div>
 
+<!-- Contact Button -->
 <a href="mailto:quality@grigoriadisgruppe.ch" class="contact-button">Contact Us</a>
 
 <script>
@@ -67,20 +81,26 @@ const tabEls = document.querySelectorAll(".tab");
 const dashboardContainer = document.getElementById("dashboardContainer");
 const scopeContainer = document.getElementById("scopeContainer");
 
-tabEls.forEach(tab => tab.addEventListener("click", () => {
-  tabEls.forEach(t => t.classList.remove("active"));
-  tab.classList.add("active");
-  if(tab.dataset.tab==="dashboard"){
-    scopeContainer.style.display="none";
-    dashboardContainer.style.display="grid";
-    loadDashboard();
-  } else {
-    dashboardContainer.style.display="none";
-    scopeContainer.style.display="block";
-  }
-}));
+tabEls.forEach(tab=>{
+  tab.addEventListener("click",()=>{
+    if(tab.classList.contains("external")){
+      window.open(tab.dataset.url,"_blank");
+      return;
+    }
+    tabEls.forEach(t=>t.classList.remove("active"));
+    tab.classList.add("active");
+    if(tab.dataset.tab==="dashboard"){
+      scopeContainer.style.display="none";
+      dashboardContainer.style.display="grid";
+      loadDashboard();
+    } else if(tab.dataset.tab==="scope"){
+      dashboardContainer.style.display="none";
+      scopeContainer.style.display="block";
+    }
+  });
+});
 
-// Example data (replace with backend API fetch)
+// Stock data last week
 const lastWeekData = {
   "JPM": 145.2,
   "MSFT": 298.5,
@@ -89,31 +109,78 @@ const lastWeekData = {
   "0857.HK": 5.7
 };
 
+// Dashboard Charts
 function loadDashboard(){
   dashboardContainer.innerHTML="";
   const labels = Object.keys(lastWeekData);
   const prices = Object.values(lastWeekData);
 
-  const card = document.createElement("div");
-  card.className="card";
-  card.innerHTML=`<h3>Last Week Stock Prices</h3><canvas id="weekChart"></canvas>`;
-  dashboardContainer.appendChild(card);
-
-  const ctx = document.getElementById("weekChart").getContext("2d");
-  new Chart(ctx,{
+  // Last Week Stock Prices Bar
+  const card1 = document.createElement("div");
+  card1.className="card";
+  card1.innerHTML=`<h3>Last Week Stock Prices</h3><canvas id="weekChart"></canvas>`;
+  dashboardContainer.appendChild(card1);
+  new Chart(card1.querySelector("canvas").getContext("2d"),{
     type:"bar",
-    data:{labels, datasets:[{label:"Price USD",data:prices, backgroundColor:"#8B6F47"}]},
-    options:{responsive:true, plugins:{legend:{display:false}}}
+    data:{labels,datasets:[{label:"Price USD",data:prices,backgroundColor:"#8B6F47"}]},
+    options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false}}}
+  });
+
+  // Revenue Bar Chart
+  const revenueCard=document.createElement("div");
+  revenueCard.className="card";
+  revenueCard.innerHTML=`<h3>Revenue Chart</h3><canvas></canvas>`;
+  dashboardContainer.appendChild(revenueCard);
+  new Chart(revenueCard.querySelector("canvas").getContext("2d"),{
+    type:"bar",
+    data:{labels:["JP Morgan","Microsoft","Goldman Sachs","Rheinmetall","PetroChina"],
+          datasets:[{label:"Revenue (B USD)",data:[120,190,55,80,65],backgroundColor:"#8B6F47"}]}
+  });
+
+  // Profit Line Chart
+  const profitCard=document.createElement("div");
+  profitCard.className="card";
+  profitCard.innerHTML=`<h3>Profit Line</h3><canvas></canvas>`;
+  dashboardContainer.appendChild(profitCard);
+  new Chart(profitCard.querySelector("canvas").getContext("2d"),{
+    type:"line",
+    data:{labels:["Q1","Q2","Q3","Q4"],datasets:[{label:"Profit (B USD)",data:[35,40,45,61],borderColor:"#C6A96B",fill:false}]}
+  });
+
+  // Market Share Pie
+  const pieCard=document.createElement("div");
+  pieCard.className="card";
+  pieCard.innerHTML=`<h3>Market Share Pie</h3><canvas></canvas>`;
+  dashboardContainer.appendChild(pieCard);
+  new Chart(pieCard.querySelector("canvas").getContext("2d"),{
+    type:"pie",
+    data:{labels:["JP Morgan","Microsoft","Goldman Sachs","Rheinmetall","PetroChina"],
+          datasets:[{label:"Market Share %",data:[25,30,15,10,20],
+                     backgroundColor:["#8B6F47","#C6A96B","#D4B35B","#E3C88D","#A67C52"]}]}
   });
 }
 
-// PDF report placeholder (expand with jsPDF)
-function generatePDF(){
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  doc.text("GRIGORIADIS GRUPPE – Weekly Report", 20, 20);
-  doc.save("weekly-report.pdf");
-}
+// Initialize
+loadDashboard();
+
+// 3D Logo Particles
+const wrapper=document.getElementById("logoWrapper");
+wrapper.addEventListener("mousemove",e=>{
+    const rect=wrapper.getBoundingClientRect();
+    const rotateX=(e.clientY-rect.top)/rect.height-0.5;
+    const rotateY=(e.clientX-rect.left)/rect.width-0.5;
+    wrapper.querySelector(".logo-card").style.transform=`rotateX(${-rotateX*10}deg) rotateY(${rotateY*10}deg)`;
+});
+wrapper.addEventListener("mouseleave",()=>{wrapper.querySelector(".logo-card").style.transform="rotateX(0) rotateY(0)";});
+
+// Particles
+const canvas=document.getElementById("particles"), ctx=canvas.getContext("2d");
+canvas.width=canvas.offsetWidth; canvas.height=canvas.offsetHeight;
+let particles=[]; for(let i=0;i<40;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,size:Math.random()*2,speedY:Math.random()*0.5+0.2});}
+function animateParticles(){ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle="rgba(198,169,107,0.6)";
+particles.forEach(p=>{p.y-=p.speedY; if(p.y<0)p.y=canvas.height; ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill();});
+requestAnimationFrame(animateParticles);}
+animateParticles();
 </script>
 
 </body>
