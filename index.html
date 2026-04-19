@@ -1,12 +1,13 @@
-```html
+```html id="fullmerge01"
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>GRIGORIADIS GRUPPE – Private Dashboard</title>
+<title>GRIGORIADIS GRUPPE – Private Wealth Dashboard</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root {
@@ -17,15 +18,22 @@
     --primary-hover:#A08353;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Playfair Display', serif;background:var(--bg);}
+body.dark { --bg:#0f1115; --text:#eaeaea; --card:rgba(255,255,255,0.05); }
 
-/* LOGIN */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Playfair Display', serif;background:var(--bg);color:var(--text);}
+
+/* ================= LOGIN ================= */
 #loginScreen{
   position:fixed;
+  top:0;
+  left:0;
   width:100%;
   height:100%;
-  background:url("GGruppe Portal background.jpg") center/cover no-repeat;
+  background-image:url("GGruppe Portal background.jpg");
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -61,76 +69,86 @@ body{font-family:'Playfair Display', serif;background:var(--bg);}
 }
 
 .login-box button:hover{background:#A08353;}
+#errorMsg{color:#ff6b6b;margin-top:10px;font-size:14px;}
 
-#errorMsg{color:#ff6b6b;font-size:14px;margin-top:10px;}
-
-/* MAIN */
+/* ================= MAIN SITE ================= */
 #mainContent{display:none;}
 
-.tabs{
+.tabs {
   display:flex;
+  flex-wrap:wrap;
   justify-content:center;
   background:var(--card);
-  margin:20px auto;
   border-radius:12px;
-  max-width:900px;
+  margin:20px auto;
+  overflow:hidden;
+  max-width:1000px;
 }
 
-.tab{
+.tab {
   flex:1;
-  padding:15px;
   text-align:center;
+  padding:15px 20px;
   cursor:pointer;
+  font-weight:600;
+  border-bottom:3px solid transparent;
 }
 
 .tab.active{
+  border-bottom:3px solid var(--primary);
   background:var(--primary);
   color:white;
 }
 
 .title{text-align:center;margin-top:20px;}
-.title h1{font-size:40px;color:var(--primary);}
+.title h1{font-size:42px;color:var(--primary);}
 
 .dashboard{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:25px;
-  padding:40px;
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+    padding:40px;
 }
 
 .card{
-  background:var(--card);
   padding:20px;
   border-radius:20px;
+  background:var(--card);
 }
 
+/* FOOTER */
+.footer{display:flex;justify-content:center;padding:80px 20px;flex-direction:column;align-items:center;}
+.logo-card{
+  padding:30px 50px;
+  border-radius:25px;
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(20px);
+  text-align:center;
+}
+.logo{width:180px;}
+
 /* BUTTONS */
-.logout-button, .contact-button{
+.contact-button, .logout-button{
   position:fixed;
   bottom:20px;
   padding:12px 25px;
   border-radius:10px;
   color:white;
   cursor:pointer;
+  text-decoration:none;
 }
 
-.logout-button{
-  left:20px;
-  background:#444;
-}
-.logout-button:hover{background:#666;}
+.contact-button{right:20px;background:var(--primary);}
+.logout-button{left:20px;background:#444;}
 
-.contact-button{
-  right:20px;
-  background:var(--primary);
-}
 .contact-button:hover{background:var(--primary-hover);}
+.logout-button:hover{background:#666;}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<!-- ================= LOGIN ================= -->
 <div id="loginScreen">
   <div class="login-box">
     <h2>GGruppe Portal</h2>
@@ -141,58 +159,59 @@ body{font-family:'Playfair Display', serif;background:var(--bg);}
   </div>
 </div>
 
-<!-- MAIN -->
+<!-- ================= MAIN CONTENT ================= -->
 <div id="mainContent">
 
-<div class="tabs">
-  <div class="tab active" data-tab="dashboard">Dashboard</div>
-  <div class="tab" data-tab="reports">Reports</div>
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" data-tab="dashboard">Dashboard</div>
+    <div class="tab" data-tab="reports">Reports</div>
+    <div class="tab" data-tab="mail">Mail</div>
+    <div class="tab external" data-url="https://grigoriadisdionysios.de6.quickconnect.to/#/signin">Server</div>
+    <div class="tab external" data-url="https://www.etoro.com">Portfolio</div>
+    <div class="tab" data-tab="scope">Scope</div>
+    <div class="tab" data-tab="tools">Tools</div>
+  </div>
+
+  <div class="title"><h1>Managing Assets</h1></div>
+
+  <div class="dashboard" id="dashboardContainer"></div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+      <div class="logo-card">
+          <img src="NewBulletinLogo-removebg-preview.png" class="logo">
+          <div class="logo-text">Investing in Talent.</div>
+      </div>
+  </div>
+
+  <a href="mailto:quality@grigoriadisgruppe.ch" class="contact-button">Contact Us</a>
+  <div class="logout-button" onclick="logout()">Logout</div>
+
 </div>
 
-<div class="title"><h1>Managing Assets</h1></div>
-<div class="dashboard" id="dashboardContainer"></div>
-
-<div class="logout-button" onclick="logout()">Logout</div>
-<a href="mailto:quality@grigoriadisgruppe.ch" class="contact-button">Contact</a>
-
-</div>
-
+<!-- ================= SCRIPT ================= -->
 <script>
-// ELEMENTS
-const usernameInput = document.getElementById("username");
-const passwordInput = document.getElementById("password");
-const errorMsg = document.getElementById("errorMsg");
 
 // LOGIN
 function login(){
-  const user = usernameInput.value.trim();
-  const pass = passwordInput.value.trim();
-
-  if(!user || !pass){
-    errorMsg.innerText = "Please enter username and password";
-    return;
-  }
+  const user = document.getElementById("username").value.trim();
+  const pass = document.getElementById("password").value.trim();
 
   if(
     user === "dionysios.g@grigoriadisgruppe.ch" &&
     pass === "Catshatedogs-4444"
   ){
-    localStorage.setItem("loggedIn", "true");
+    localStorage.setItem("loggedIn","true");
     showMain();
   } else {
-    errorMsg.innerText = "Invalid login credentials";
+    document.getElementById("errorMsg").innerText = "Invalid login credentials";
   }
 }
 
 // ENTER KEY LOGIN
-[usernameInput, passwordInput].forEach(input=>{
-  input.addEventListener("keypress", e=>{
-    if(e.key === "Enter") login();
-  });
-
-  input.addEventListener("input", ()=>{
-    errorMsg.innerText = "";
-  });
+document.addEventListener("keydown", function(e){
+  if(e.key === "Enter") login();
 });
 
 // LOGOUT
@@ -203,21 +222,21 @@ function logout(){
 
 // SHOW MAIN
 function showMain(){
-  document.getElementById("loginScreen").style.display = "none";
-  document.getElementById("mainContent").style.display = "block";
+  document.getElementById("loginScreen").style.display="none";
+  document.getElementById("mainContent").style.display="block";
   loadDashboard();
 }
 
 // SESSION CHECK
 window.onload = () => {
-  if(localStorage.getItem("loggedIn") === "true"){
+  if(localStorage.getItem("loggedIn")==="true"){
     showMain();
   }
 };
 
 // DASHBOARD
 function loadDashboard(){
-  document.getElementById("dashboardContainer").innerHTML = `
+  document.getElementById("dashboardContainer").innerHTML=`
     <div class="card">
       <h3>Welcome</h3>
       <p>Private dashboard active.</p>
@@ -231,14 +250,15 @@ document.querySelectorAll(".tab").forEach(tab=>{
     document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
 
-    if(tab.dataset.tab === "dashboard"){
+    if(tab.dataset.tab==="dashboard"){
       loadDashboard();
     } else {
-      document.getElementById("dashboardContainer").innerHTML =
-        "<div class='card'><h3>Reports Section</h3></div>";
+      document.getElementById("dashboardContainer").innerHTML=
+        "<div class='card'><h3>Section Loading...</h3></div>";
     }
   });
 });
+
 </script>
 
 </body>
