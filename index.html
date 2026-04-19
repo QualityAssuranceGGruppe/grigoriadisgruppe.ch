@@ -6,7 +6,6 @@
 <title>GRIGORIADIS GRUPPE – Private Wealth Dashboard</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root {
@@ -14,13 +13,6 @@
     --text:#222;
     --card:rgba(255,255,255,0.7);
     --primary:#8B6F47;
-    --primary-hover:#A08353;
-}
-
-body.dark {
-    --bg:#0f1115;
-    --text:#eaeaea;
-    --card:rgba(255,255,255,0.05);
 }
 
 body{
@@ -28,7 +20,6 @@ body{
     font-family:'Playfair Display', serif;
     background:var(--bg);
     color:var(--text);
-    transition:0.3s;
 }
 
 /* LOGIN */
@@ -47,7 +38,6 @@ body{
     padding:40px;
     border-radius:20px;
     background:rgba(0,0,0,0.65);
-    backdrop-filter:blur(12px);
     color:white;
     text-align:center;
 }
@@ -67,16 +57,13 @@ body{
     border-radius:10px;
     background:var(--primary);
     color:white;
-    cursor:pointer;
 }
-
-#errorMsg{color:#ff6b6b;}
 
 /* TABS */
 .tabs{
     display:flex;
-    flex-wrap:wrap;
     justify-content:center;
+    flex-wrap:wrap;
     background:var(--card);
     margin:20px auto;
     max-width:1000px;
@@ -90,45 +77,41 @@ body{
     padding:15px;
     cursor:pointer;
     font-weight:600;
-    border-bottom:3px solid transparent;
 }
-
-.tab:hover{background:rgba(0,0,0,0.05);}
 
 .tab.active{
     background:var(--primary);
     color:white;
-    border-bottom:3px solid var(--primary);
-}
-
-.link-label{
-    font-size:12px;
-    color:#A08353;
-    margin-left:4px;
-}
-
-/* TITLE */
-.title{
-    text-align:center;
-    margin-top:20px;
-}
-.title h1{
-    font-size:42px;
-    color:var(--primary);
 }
 
 /* DASHBOARD */
 .dashboard{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
     padding:40px;
 }
 
-.card{
+/* NEWS FEED (SCROLLABLE LIKE REAL SITE) */
+.news-container{
+    height:65vh;
+    overflow-y:auto;
     padding:20px;
     border-radius:20px;
     background:var(--card);
+}
+
+.news-item{
+    padding:15px 0;
+    border-bottom:1px solid rgba(0,0,0,0.1);
+}
+
+.news-item a{
+    text-decoration:none;
+    color:var(--primary);
+    font-size:15px;
+}
+
+.news-source{
+    font-size:12px;
+    opacity:0.6;
 }
 
 /* FOOTER */
@@ -138,36 +121,15 @@ body{
     padding:80px 20px;
 }
 
-.logo-wrapper{
-    position:relative;
-    perspective:1000px;
-}
-
-#particles{
-    position:absolute;
-    width:100%;
-    height:100%;
-}
-
 .logo-card{
     padding:30px 50px;
     border-radius:25px;
     background:rgba(255,255,255,0.06);
-    backdrop-filter:blur(20px);
     text-align:center;
-    transition:0.2s;
 }
 
 .logo{width:180px;}
 
-.logo-text{
-    margin-top:15px;
-    color:var(--primary);
-    letter-spacing:3px;
-    font-size:14px;
-}
-
-/* BUTTONS */
 .contact-button{
     position:fixed;
     bottom:20px;
@@ -189,22 +151,6 @@ body{
     border-radius:10px;
     cursor:pointer;
 }
-
-/* SCOPE */
-.about-container{display:flex;gap:30px;}
-.about-sidebar{flex:0 0 220px;}
-.about-content{flex:1;}
-.about-sidebar a{color:#8B6F47;cursor:pointer;}
-
-/* TOOLS */
-.tools-container{display:flex;flex-direction:column;gap:15px;}
-.tools-container button{
-    padding:12px;
-    background:#8B6F47;
-    border:none;
-    color:white;
-    border-radius:10px;
-}
 </style>
 </head>
 
@@ -213,7 +159,7 @@ body{
 <!-- LOGIN -->
 <div id="loginOverlay">
     <div class="loginBox">
-        <h2>GGruppe Portal</h2>
+        <h2>Online Portal Log in</h2>
         <input id="user" placeholder="Username">
         <input id="pass" type="password" placeholder="Password">
         <button onclick="login()">Log In</button>
@@ -224,9 +170,9 @@ body{
 <!-- MAIN -->
 <div id="siteWrapper">
 
+<!-- TABS -->
 <div class="tabs">
   <div class="tab active" data-tab="dashboard">Dashboard</div>
-  <div class="tab" data-tab="reports">Reports</div>
   <div class="tab" data-tab="mail">Mail</div>
 
   <div class="tab external" data-url="https://grigoriadisdionysios.de6.quickconnect.to/#/signin">
@@ -241,45 +187,13 @@ body{
   <div class="tab" data-tab="tools">Tools</div>
 </div>
 
-<div class="title"><h1>Managing Assets</h1></div>
-
+<!-- DASHBOARD = ONLY NEWS -->
 <div class="dashboard" id="dashboardContainer"></div>
 
-<div class="footer">
-    <div class="logo-wrapper" id="logoWrapper">
-        <canvas id="particles"></canvas>
-        <div class="logo-card">
-            <img src="NewBulletinLogo-removebg-preview.png" class="logo">
-            <div class="logo-text">Investing in Talent.</div>
-        </div>
-    </div>
 </div>
 
-</div>
-
-<a class="contact-button" href="mailto:quality@grigoriadisgruppe.ch">Contact Us</a>
+<a class="contact-button" href="mailto:quality@grigoriadisgruppe.ch">Contact</a>
 <div class="logout-button" onclick="logout()">Logout</div>
-
-<!-- TEMPLATES -->
-<div id="scope-template" style="display:none;">
-    <div class="about-container">
-        <div class="about-sidebar">
-            <h3>Index</h3>
-            <ul><li><a data-target="section1">Scope</a></li></ul>
-        </div>
-        <div class="about-content">
-            <h3 id="section1">Scope</h3>
-            <p>Private wealth management system overview...</p>
-        </div>
-    </div>
-</div>
-
-<div id="tools-template" style="display:none;">
-    <div class="tools-container">
-        <button onclick="downloadExcel()">Download Excel</button>
-        <button onclick="downloadWord()">Download Word</button>
-    </div>
-</div>
 
 <script>
 
@@ -307,111 +221,44 @@ function logout(){
     location.reload();
 }
 
-/* STOCKS */
-const stockList=[
- {title:"JP Morgan",price:141.5},
- {title:"Microsoft",price:310.12},
- {title:"Goldman Sachs",price:348.9},
- {title:"Rheinmetall",price:190.45},
- {title:"PetroChina",price:7.85}
-];
-
-/* DASHBOARD */
-function loadDashboard(){
+/* NEWS DASHBOARD ONLY */
+async function loadDashboard(){
     const c=document.getElementById("dashboardContainer");
-    c.innerHTML="";
-    const card=document.createElement("div");
-    card.className="card";
-    card.innerHTML="<h3>Stocks</h3>";
 
-    stockList.forEach(s=>{
-        card.innerHTML+=`<div>${s.title}: $${s.price}</div>`;
-    });
+    c.innerHTML=`
+    <div class="news-container">
+        <h2>Live Financial News</h2>
+        <div id="news">Loading news...</div>
+    </div>`;
 
-    c.appendChild(card);
+    const feeds=[
+        "https://news.google.com/rss/search?q=site:nytimes.com+finance&hl=en-US&gl=US&ceid=US:en",
+        "https://news.google.com/rss/search?q=site:wsj.com+finance&hl=en-US&gl=US&ceid=US:en"
+    ];
+
+    let html="";
+
+    for(const url of feeds){
+        const res=await fetch(url);
+        const text=await res.text();
+        const xml=new DOMParser().parseFromString(text,"text/xml");
+
+        xml.querySelectorAll("item").forEach((item,i)=>{
+            if(i<10){
+                const title=item.querySelector("title").textContent;
+                const link=item.querySelector("link").textContent;
+
+                html+=`
+                <div class="news-item">
+                    <a href="${link}" target="_blank">${title}</a>
+                    <div class="news-source">${url.includes("nytimes")?"New York Times":"Wall Street Journal"}</div>
+                </div>`;
+            }
+        });
+    }
+
+    document.getElementById("news").innerHTML=html;
 }
-
-/* REPORTS */
-function loadReports(){
-    const c=document.getElementById("dashboardContainer");
-    c.innerHTML="";
-    const card=document.createElement("div");
-    card.className="card";
-    card.innerHTML="<h3>Report</h3><canvas></canvas>";
-    c.appendChild(card);
-
-    new Chart(card.querySelector("canvas"),{
-        type:"bar",
-        data:{
-            labels:stockList.map(s=>s.title),
-            datasets:[{data:stockList.map(s=>s.price)}]
-        }
-    });
-}
-
-/* SCOPE */
-function loadScope(){
-    const c=document.getElementById("dashboardContainer");
-    c.innerHTML=document.getElementById("scope-template").innerHTML;
-}
-
-/* TOOLS */
-function loadTools(){
-    document.getElementById("dashboardContainer").innerHTML=
-    document.getElementById("tools-template").innerHTML;
-}
-
-function downloadExcel(){
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(new Blob(["a,b\n1,2"],{type:"text/csv"}));
-    a.download="file.xlsx";
-    a.click();
-}
-
-function downloadWord(){
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(new Blob(["test"],{type:"application/msword"}));
-    a.download="file.doc";
-    a.click();
-}
-
-/* PARTICLES */
-const canvas=document.getElementById("particles");
-const ctx=canvas.getContext("2d");
-canvas.width=canvas.offsetWidth;
-canvas.height=canvas.offsetHeight;
-
-let particles=[];
-for(let i=0;i<40;i++){
- particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*2});
-}
-
-function animate(){
- ctx.clearRect(0,0,canvas.width,canvas.height);
- ctx.fillStyle="rgba(198,169,107,0.6)";
- particles.forEach(p=>{
-  p.y-=0.3;
-  if(p.y<0)p.y=canvas.height;
-  ctx.beginPath();
-  ctx.arc(p.x,p.y,p.s,0,Math.PI*2);
-  ctx.fill();
- });
- requestAnimationFrame(animate);
-}
-animate();
-
-/* 3D LOGO */
-const wrapper=document.getElementById("logoWrapper");
-wrapper.addEventListener("mousemove",e=>{
- const r=wrapper.getBoundingClientRect();
- const x=(e.clientX-r.left)/r.width-0.5;
- const y=(e.clientY-r.top)/r.height-0.5;
- wrapper.querySelector(".logo-card").style.transform=
- `rotateX(${-y*10}deg) rotateY(${x*10}deg)`;
-});
-wrapper.addEventListener("mouseleave",()=>{
- wrapper.querySelector(".logo-card").style.transform="rotateX(0) rotateY(0)";
-});
 
 /* TABS */
 document.querySelectorAll(".tab").forEach(t=>{
@@ -422,10 +269,9 @@ document.querySelectorAll(".tab").forEach(t=>{
   const tab=t.dataset.tab;
 
   if(tab==="dashboard") loadDashboard();
-  else if(tab==="reports") loadReports();
-  else if(tab==="scope") loadScope();
-  else if(tab==="tools") loadTools();
   else if(tab==="mail") window.open("https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1");
+  else if(tab==="scope") alert("Scope page not included in this slim version");
+  else if(tab==="tools") alert("Tools page not included in this slim version");
   else if(t.classList.contains("external")) window.open(t.dataset.url);
  };
 });
