@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,14 +17,22 @@
     --primary-hover:#A08353;
 }
 
+/* DARK MODE SUPPORT (from script 2) */
+body.dark {
+    --bg:#0f1115;
+    --text:#eaeaea;
+    --card:rgba(255,255,255,0.05);
+}
+
 body{
     margin:0;
     font-family:'Playfair Display', serif;
     background:var(--bg);
     color:var(--text);
+    transition:0.3s;
 }
 
-/* ================= LOGIN OVERLAY (ONLY ADDITION) ================= */
+/* ================= LOGIN OVERLAY ================= */
 #loginOverlay{
     position:fixed;
     inset:0;
@@ -66,9 +73,7 @@ body{
 
 #errorMsg{color:#ff6b6b;margin-top:10px;}
 
-/* ================= YOUR ORIGINAL SITE (UNCHANGED) ================= */
-
-/* TAB HEADER */
+/* ================= TABS ================= */
 .tabs {
   display:flex;
   flex-wrap:wrap;
@@ -87,6 +92,7 @@ body{
   cursor:pointer;
   font-weight:600;
   border-bottom:3px solid transparent;
+  transition:0.3s;
 }
 
 .tab:hover{ background:rgba(0,0,0,0.05); }
@@ -97,9 +103,17 @@ body{
   color:white;
 }
 
+.link-label{
+  font-size:12px;
+  color:#A08353;
+  margin-left:4px;
+}
+
+/* TITLE */
 .title{text-align:center;margin-top:20px;}
 .title h1{font-size:42px;color:var(--primary);}
 
+/* DASHBOARD */
 .dashboard{
     display:grid;
     grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
@@ -111,13 +125,32 @@ body{
     padding:20px;
     border-radius:20px;
     background:var(--card);
+    backdrop-filter: blur(12px);
+    transition:0.3s;
 }
 
-/* FOOTER */
+.card:hover{ transform: translateY(-8px); }
+
+canvas{ width:100%; height:200px; }
+
+/* FOOTER + LOGO */
 .footer{
     display:flex;
     justify-content:center;
     padding:80px 20px;
+}
+
+.logo-wrapper{
+    position:relative;
+    perspective:1000px;
+}
+
+#particles{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
 }
 
 .logo-card{
@@ -126,29 +159,70 @@ body{
     background:rgba(255,255,255,0.06);
     backdrop-filter:blur(20px);
     text-align:center;
+    transition:0.2s;
 }
 
 .logo{width:180px;}
 
-/* BUTTONS */
-.logout-button, .contact-button{
-    position:fixed;
-    bottom:20px;
-    padding:12px 20px;
-    border-radius:10px;
-    color:white;
-    cursor:pointer;
-    text-decoration:none;
+.logo-text{
+    margin-top:15px;
+    letter-spacing:3px;
+    font-size:14px;
+    color:var(--primary);
 }
 
-.logout-button{left:20px;background:#444;}
-.contact-button{right:20px;background:var(--primary);}
+/* BUTTONS */
+.contact-button{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    padding:15px 30px;
+    background:var(--primary);
+    color:white;
+    font-weight:600;
+    text-decoration:none;
+    border-radius:12px;
+    transition:0.3s;
+}
+
+.contact-button:hover{
+    background:var(--primary-hover);
+    transform:translateY(-3px);
+}
+
+.logout-button{
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    padding:12px 20px;
+    background:#444;
+    color:white;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+/* ABOUT / SCOPE */
+.about-container{display:flex; gap:30px;}
+.about-sidebar{flex:0 0 220px;}
+.about-content{flex:1;}
+.about-sidebar a{color:#8B6F47; cursor:pointer; text-decoration:none;}
+
+/* TOOLS */
+.tools-container{display:flex; flex-direction:column; gap:20px;}
+.tools-container button{
+    padding:12px;
+    background:#8B6F47;
+    color:white;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 
-<!-- ================= LOGIN (ONLY ADDITION) ================= -->
+<!-- LOGIN -->
 <div id="loginOverlay">
     <div class="loginBox">
         <h2>GGruppe Portal</h2>
@@ -159,16 +233,14 @@ body{
     </div>
 </div>
 
-<!-- ================= YOUR ORIGINAL WEBSITE (UNCHANGED) ================= -->
+<!-- MAIN -->
 <div id="siteWrapper">
 
-<!-- YOUR ORIGINAL HTML STAYS EXACTLY HERE -->
-<!-- NOTHING CHANGED INSIDE YOUR WEBSITE -->
-
+<!-- TABS -->
 <div class="tabs">
   <div class="tab active" data-tab="dashboard">Dashboard</div>
   <div class="tab" data-tab="reports">Reports</div>
-  <div class="tab" data-tab="mail">Mail</div>
+  <div class="tab" data-tab="mail">Mail <span class="link-label">(link)</span></div>
   <div class="tab external" data-url="https://grigoriadisdionysios.de6.quickconnect.to/#/signin">Server</div>
   <div class="tab external" data-url="https://www.etoro.com">Portfolio</div>
   <div class="tab" data-tab="scope">Scope</div>
@@ -180,29 +252,51 @@ body{
 <div class="dashboard" id="dashboardContainer"></div>
 
 <div class="footer">
-    <div class="logo-card">
-        <img src="NewBulletinLogo-removebg-preview.png" class="logo">
-        <div>Investing in Talent.</div>
+    <div class="logo-wrapper" id="logoWrapper">
+        <canvas id="particles"></canvas>
+        <div class="logo-card">
+            <img src="NewBulletinLogo-removebg-preview.png" class="logo">
+            <div class="logo-text">Investing in Talent.</div>
+        </div>
     </div>
 </div>
 
-<a href="mailto:quality@grigoriadisgruppe.ch" class="contact-button">Contact Us</a>
+</div>
+
+<a class="contact-button" href="mailto:quality@grigoriadisgruppe.ch">Contact Us</a>
 <div class="logout-button" onclick="logout()">Logout</div>
 
+<!-- TEMPLATES -->
+<div id="scope-template" style="display:none;">
+  <div class="about-container">
+    <div class="about-sidebar">
+      <h3>Index</h3>
+      <ul>
+        <li><a data-target="section1">Scope</a></li>
+      </ul>
+    </div>
+    <div class="about-content">
+      <h3 id="section1">GRIGORIADIS GRUPPE Scope</h3>
+      <p>Private Wealth Management system...</p>
+    </div>
+  </div>
+</div>
+
+<div id="tools-template" style="display:none;">
+  <div class="tools-container">
+    <button onclick="downloadExcel()">Download Excel</button>
+    <button onclick="downloadWord()">Download Word</button>
+  </div>
 </div>
 
 <script>
 
-/* ================= LOGIN ONLY (NO IMPACT ON SITE) ================= */
-
+/* ================= LOGIN ================= */
 function login(){
-    const u = document.getElementById("user").value.trim();
-    const p = document.getElementById("pass").value.trim();
+    const u=document.getElementById("user").value.trim();
+    const p=document.getElementById("pass").value.trim();
 
-    if(
-        u === "dionysios.g@grigoriadisgruppe.ch" &&
-        p === "Catshatedogs-4444"
-    ){
+    if(u==="dionysios.g@grigoriadisgruppe.ch" && p==="Catshatedogs-4444"){
         localStorage.setItem("auth","1");
         document.getElementById("loginOverlay").style.display="none";
     } else {
@@ -210,21 +304,157 @@ function login(){
     }
 }
 
-/* SESSION */
-window.onload = function(){
+window.onload=()=>{
     if(localStorage.getItem("auth")==="1"){
         document.getElementById("loginOverlay").style.display="none";
     }
 };
 
-/* LOGOUT */
 function logout(){
     localStorage.removeItem("auth");
     location.reload();
 }
 
-</script>
+/* ================= DATA ================= */
+const stockList=[
+ {symbol:"JPM",title:"JP Morgan",price:141.50},
+ {symbol:"MSFT",title:"Microsoft",price:310.12},
+ {symbol:"GS",title:"Goldman Sachs",price:348.90},
+ {symbol:"RHM.DE",title:"Rheinmetall",price:190.45},
+ {symbol:"0857.HK",title:"PetroChina",price:7.85}
+];
 
+/* ================= DASHBOARD ================= */
+function loadDashboard(){
+    const c=document.getElementById("dashboardContainer");
+    c.innerHTML="";
+
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML="<h3>Stock Prices</h3>";
+
+    stockList.forEach(s=>{
+        card.innerHTML+=`<div>${s.title}: $${s.price}</div>`;
+    });
+
+    c.appendChild(card);
+}
+
+/* ================= REPORTS ================= */
+function loadReports(){
+    const c=document.getElementById("dashboardContainer");
+    c.innerHTML="";
+
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML="<h3>Weekly Report</h3><canvas></canvas>";
+    c.appendChild(card);
+
+    new Chart(card.querySelector("canvas").getContext("2d"),{
+        type:"bar",
+        data:{
+            labels:stockList.map(s=>s.title),
+            datasets:[{data:stockList.map(s=>s.price)}]
+        }
+    });
+}
+
+/* ================= SCOPE ================= */
+function loadScope(){
+    const c=document.getElementById("dashboardContainer");
+    c.innerHTML=document.querySelector("#scope-template").innerHTML;
+
+    c.querySelectorAll("a").forEach(a=>{
+        a.onclick=()=>{
+            const target=c.querySelector("#"+a.dataset.target);
+            if(target) target.scrollIntoView({behavior:"smooth"});
+        };
+    });
+}
+
+/* ================= TOOLS ================= */
+function loadTools(){
+    document.getElementById("dashboardContainer").innerHTML=
+    document.querySelector("#tools-template").innerHTML;
+}
+
+function downloadExcel(){
+    const blob=new Blob(["a,b\n1,2"],{type:"text/csv"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="file.xlsx";
+    a.click();
+}
+
+function downloadWord(){
+    const blob=new Blob(["test"],{type:"application/msword"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="file.doc";
+    a.click();
+}
+
+/* ================= PARTICLES ================= */
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+canvas.width=canvas.offsetWidth;
+canvas.height=canvas.offsetHeight;
+
+let particles=[];
+for(let i=0;i<40;i++){
+ particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*2});
+}
+
+function animate(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.fillStyle="rgba(198,169,107,0.6)";
+ particles.forEach(p=>{
+  p.y-=0.3;
+  if(p.y<0)p.y=canvas.height;
+  ctx.beginPath();
+  ctx.arc(p.x,p.y,p.s,0,Math.PI*2);
+  ctx.fill();
+ });
+ requestAnimationFrame(animate);
+}
+animate();
+
+/* ================= 3D LOGO FIXED ================= */
+const wrapper=document.getElementById("logoWrapper");
+
+wrapper.addEventListener("mousemove",e=>{
+ const r=wrapper.getBoundingClientRect();
+ const x=(e.clientX-r.left)/r.width-0.5;
+ const y=(e.clientY-r.top)/r.height-0.5;
+
+ wrapper.querySelector(".logo-card").style.transform=
+ `rotateX(${-y*10}deg) rotateY(${x*10}deg)`;
+});
+
+wrapper.addEventListener("mouseleave",()=>{
+ wrapper.querySelector(".logo-card").style.transform="rotateX(0) rotateY(0)";
+});
+
+/* ================= TABS ================= */
+document.querySelectorAll(".tab").forEach(t=>{
+ t.onclick=()=>{
+
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");
+
+  const tab=t.dataset.tab;
+
+  if(tab==="dashboard") loadDashboard();
+  else if(tab==="reports") loadReports();
+  else if(tab==="scope") loadScope();
+  else if(tab==="tools") loadTools();
+  else if(tab==="mail") window.open("https://admin.hostpoint.ch/public/en/auth/cloud-office?redirect=1");
+  else if(t.classList.contains("external")) window.open(t.dataset.url);
+ };
+});
+
+loadDashboard();
+
+</script>
 </body>
 </html>
-```
