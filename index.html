@@ -1,4 +1,4 @@
-```html id="fullmerge01"
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,28 +11,29 @@
 
 <style>
 :root {
-    --bg:#f5f5f5;
-    --text:#222;
-    --card:rgba(255,255,255,0.7);
-    --primary:#8B6F47;
-    --primary-hover:#A08353;
+  --bg:#f5f5f5;
+  --text:#222;
+  --card:rgba(255,255,255,0.7);
+  --primary:#8B6F47;
+  --primary-hover:#A08353;
 }
 
-body.dark { --bg:#0f1115; --text:#eaeaea; --card:rgba(255,255,255,0.05); }
-
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Playfair Display', serif;background:var(--bg);color:var(--text);}
+
+body{
+  font-family:'Playfair Display', serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
 
 /* ================= LOGIN ================= */
 #loginScreen{
   position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+  inset:0;
   background-image:url("GGruppe Portal background.jpg");
   background-size:cover;
-  background-position:center;
+  background-position:center center;
   background-repeat:no-repeat;
   display:flex;
   justify-content:center;
@@ -41,13 +42,13 @@ body{font-family:'Playfair Display', serif;background:var(--bg);color:var(--text
 }
 
 .login-box{
-  background:rgba(0,0,0,0.6);
+  background:rgba(0,0,0,0.65);
   backdrop-filter:blur(15px);
   padding:40px;
   border-radius:20px;
   text-align:center;
   color:white;
-  width:320px;
+  width:340px;
 }
 
 .login-box input{
@@ -61,63 +62,74 @@ body{font-family:'Playfair Display', serif;background:var(--bg);color:var(--text
 .login-box button{
   width:100%;
   padding:12px;
-  background:#8B6F47;
+  background:var(--primary);
   color:white;
   border:none;
   border-radius:10px;
   cursor:pointer;
 }
 
-.login-box button:hover{background:#A08353;}
-#errorMsg{color:#ff6b6b;margin-top:10px;font-size:14px;}
+#errorMsg{color:#ff6b6b;margin-top:10px;}
 
-/* ================= MAIN SITE ================= */
+/* ================= MAIN ================= */
 #mainContent{display:none;}
 
-.tabs {
+/* TABS */
+.tabs{
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
   background:var(--card);
-  border-radius:12px;
   margin:20px auto;
+  max-width:1100px;
+  border-radius:12px;
   overflow:hidden;
-  max-width:1000px;
 }
 
-.tab {
+.tab{
   flex:1;
   text-align:center;
-  padding:15px 20px;
+  padding:15px;
   cursor:pointer;
-  font-weight:600;
-  border-bottom:3px solid transparent;
 }
 
 .tab.active{
-  border-bottom:3px solid var(--primary);
   background:var(--primary);
   color:white;
 }
 
-.title{text-align:center;margin-top:20px;}
-.title h1{font-size:42px;color:var(--primary);}
+/* TITLE */
+.title{
+  text-align:center;
+  margin-top:20px;
+}
 
+.title h1{
+  font-size:42px;
+  color:var(--primary);
+}
+
+/* DASHBOARD */
 .dashboard{
-    display:grid;
-    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
-    padding:40px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
+  padding:40px;
 }
 
 .card{
+  background:var(--card);
   padding:20px;
   border-radius:20px;
-  background:var(--card);
 }
 
 /* FOOTER */
-.footer{display:flex;justify-content:center;padding:80px 20px;flex-direction:column;align-items:center;}
+.footer{
+  display:flex;
+  justify-content:center;
+  padding:80px 20px;
+}
+
 .logo-card{
   padding:30px 50px;
   border-radius:25px;
@@ -125,50 +137,44 @@ body{font-family:'Playfair Display', serif;background:var(--bg);color:var(--text
   backdrop-filter:blur(20px);
   text-align:center;
 }
+
 .logo{width:180px;}
 
 /* BUTTONS */
-.contact-button, .logout-button{
+.logout-button, .contact-button{
   position:fixed;
   bottom:20px;
-  padding:12px 25px;
+  padding:12px 22px;
   border-radius:10px;
   color:white;
   cursor:pointer;
   text-decoration:none;
 }
 
-.contact-button{right:20px;background:var(--primary);}
 .logout-button{left:20px;background:#444;}
-
-.contact-button:hover{background:var(--primary-hover);}
-.logout-button:hover{background:#666;}
+.contact-button{right:20px;background:var(--primary);}
 </style>
 </head>
 
 <body>
 
-<!-- ================= LOGIN ================= -->
+<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
     <h2>GGruppe Portal</h2>
-    <input type="text" id="username" placeholder="Username" />
-    <input type="password" id="password" placeholder="Password" />
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
     <button onclick="login()">Log In</button>
     <p id="errorMsg"></p>
   </div>
 </div>
 
-<!-- ================= MAIN CONTENT ================= -->
+<!-- MAIN -->
 <div id="mainContent">
 
-  <!-- TABS -->
   <div class="tabs">
     <div class="tab active" data-tab="dashboard">Dashboard</div>
     <div class="tab" data-tab="reports">Reports</div>
-    <div class="tab" data-tab="mail">Mail</div>
-    <div class="tab external" data-url="https://grigoriadisdionysios.de6.quickconnect.to/#/signin">Server</div>
-    <div class="tab external" data-url="https://www.etoro.com">Portfolio</div>
     <div class="tab" data-tab="scope">Scope</div>
     <div class="tab" data-tab="tools">Tools</div>
   </div>
@@ -177,86 +183,80 @@ body{font-family:'Playfair Display', serif;background:var(--bg);color:var(--text
 
   <div class="dashboard" id="dashboardContainer"></div>
 
-  <!-- FOOTER -->
   <div class="footer">
-      <div class="logo-card">
-          <img src="NewBulletinLogo-removebg-preview.png" class="logo">
-          <div class="logo-text">Investing in Talent.</div>
-      </div>
+    <div class="logo-card">
+      <img src="NewBulletinLogo-removebg-preview.png" class="logo">
+      <div>Investing in Talent.</div>
+    </div>
   </div>
 
-  <a href="mailto:quality@grigoriadisgruppe.ch" class="contact-button">Contact Us</a>
+  <a class="contact-button" href="mailto:quality@grigoriadisgruppe.ch">Contact</a>
   <div class="logout-button" onclick="logout()">Logout</div>
 
 </div>
 
-<!-- ================= SCRIPT ================= -->
 <script>
 
-// LOGIN
+/* LOGIN */
 function login(){
-  const user = document.getElementById("username").value.trim();
-  const pass = document.getElementById("password").value.trim();
+  const u = username.value.trim();
+  const p = password.value.trim();
 
   if(
-    user === "dionysios.g@grigoriadisgruppe.ch" &&
-    pass === "Catshatedogs-4444"
+    u === "dionysios.g@grigoriadisgruppe.ch" &&
+    p === "Catshatedogs-4444"
   ){
-    localStorage.setItem("loggedIn","true");
-    showMain();
+    localStorage.setItem("loggedIn","1");
+    showApp();
   } else {
-    document.getElementById("errorMsg").innerText = "Invalid login credentials";
+    errorMsg.innerText="Invalid credentials";
   }
 }
 
-// ENTER KEY LOGIN
-document.addEventListener("keydown", function(e){
-  if(e.key === "Enter") login();
+/* ENTER KEY */
+document.addEventListener("keydown",(e)=>{
+  if(e.key==="Enter") login();
 });
 
-// LOGOUT
+/* LOGOUT */
 function logout(){
   localStorage.removeItem("loggedIn");
   location.reload();
 }
 
-// SHOW MAIN
-function showMain(){
-  document.getElementById("loginScreen").style.display="none";
-  document.getElementById("mainContent").style.display="block";
+/* SHOW APP */
+function showApp(){
+  loginScreen.style.display="none";
+  mainContent.style.display="block";
   loadDashboard();
 }
 
-// SESSION CHECK
-window.onload = () => {
-  if(localStorage.getItem("loggedIn")==="true"){
-    showMain();
+/* SESSION */
+window.onload=()=>{
+  if(localStorage.getItem("loggedIn")==="1"){
+    showApp();
   }
 };
 
-// DASHBOARD
+/* DASHBOARD */
 function loadDashboard(){
-  document.getElementById("dashboardContainer").innerHTML=`
+  dashboardContainer.innerHTML=`
     <div class="card">
       <h3>Welcome</h3>
-      <p>Private dashboard active.</p>
+      <p>Dashboard loaded successfully.</p>
     </div>
   `;
 }
 
-// TABS
-document.querySelectorAll(".tab").forEach(tab=>{
-  tab.addEventListener("click", ()=>{
-    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-    tab.classList.add("active");
+/* TABS */
+document.querySelectorAll(".tab").forEach(t=>{
+  t.onclick=()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
 
-    if(tab.dataset.tab==="dashboard"){
-      loadDashboard();
-    } else {
-      document.getElementById("dashboardContainer").innerHTML=
-        "<div class='card'><h3>Section Loading...</h3></div>";
-    }
-  });
+    if(t.dataset.tab==="dashboard") loadDashboard();
+    else dashboardContainer.innerHTML="<div class='card'>Loading section...</div>";
+  };
 });
 
 </script>
